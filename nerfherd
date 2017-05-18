@@ -44,7 +44,11 @@ import webapp
 
 arguments = docopt.docopt(__doc__)
 
-if arguments['run']:
+if arguments['init']:
+    import db
+    db.init()
+
+elif arguments['run']:
     try: port = int(arguments['--port'])
     except ValueError:
         sys.stderr.write("Invalid port number: '%s'\n" % arguments['--port'])
