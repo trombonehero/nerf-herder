@@ -27,6 +27,7 @@ import flask
 import flask_bootstrap
 import flask_dotenv
 import flask_httpauth
+import forms
 import nav
 import sys
 
@@ -72,9 +73,18 @@ def index():
     return flask.render_template('index.html')
 
 
-@frontend.route('/register/')
+@frontend.route('/register/', methods = [ 'GET', 'POST' ])
 def register():
-    return 'registration page'
+    form = forms.RegistrationForm()
+    if form.validate_on_submit():
+        return 'thanks for registering'
+
+    if (not config.REGISTRATION_IS_OPEN and
+        flask.request.args.get('preregistration')
+            != flask.current_app.config['PREREGISTRATION_CODE']):
+        return flask.render_template('registration-not-open.html')
+
+    return flask.render_template('register.html')
 
 
 @frontend.route('/org/')
