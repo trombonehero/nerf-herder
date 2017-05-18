@@ -1,0 +1,54 @@
+{%- extends "bootstrap/base.html" %}
+
+{% import "bootstrap/fixes.html" as fixes %}
+{% import "bootstrap/utils.html" as utils %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block head %}
+  {{ super() }}
+  {{ fixes.ie8() }}
+{%- endblock %}
+
+{% block scripts -%}
+  {{ super() }}
+  <script type="text/javascript" src="/static/js/material.min.js"></script>
+  <script type="text/javascript" src="/static/js/ripples.min.js"></script>
+  <script type="text/javascript">$.material.init()</script>
+{%- endblock %}
+
+{% block styles -%}
+    {{super()}}
+
+    <!-- Material Design fonts -->
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/icon?family=Material+Icons">
+
+    <!-- Bootstrap Material Design -->
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap-material-design.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/ripples.min.css">
+
+    <!-- Nerfherder style -->
+    <link rel="stylesheet" type="text/css" href="/static/css/nerfherder.css">
+
+    <!-- Local style -->
+    <link rel="stylesheet" type="text/css" href="/static/css/local.css">
+{% endblock %}
+
+{% block navbar %}
+  {{ nav.frontend_top.render() }}
+{% endblock %}
+
+{% block content %}
+  {%- with messages = get_flashed_messages(with_categories=True) %}
+    {%- if messages %}
+      <div class="row">
+        <div class="col-md-12">
+          {{ utils.flashed_messages(messages) }}
+        </div>
+      </div>
+    {%- endif %}
+  {%- endwith %}
+
+  <img id="logo" src="/static/img/punter.png"/>
+{% endblock %}

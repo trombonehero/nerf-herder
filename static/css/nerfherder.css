@@ -1,0 +1,63 @@
+.navbar, .navbar.navbar-default
+{
+  background-color: #990000;
+}
+
+.navbar-inverse
+{
+  background-color: black;
+}
+
+#logo
+{
+  width: 280px;
+
+  position: absolute;
+  bottom: 1em;
+  right: 0;
+}
+
+table.calendar
+{
+  border-spacing: .5em;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+table.calendar td {
+  vertical-align: middle;
+}
+
+table.calendar td.time {
+  text-align: right;
+}
+
+table.calendar td.track1 {
+  background-color: rgba(0, 51, 102, .1);
+}
+
+table.calendar td.track2 {
+  background-color: rgba(0, 102, 51, .1);
+}
+
+table.calendar td:not(:empty) {
+  padding: .75em;
+  width: 9em;
+}
+
+table.calendar td:not(:empty):not(.time):not(.track1):not(.track2) {
+  background: rgba(102, 102, 102, .05);
+}
+
+table.calendar th {
+  padding-top: .75em;
+  padding-left: .5em;
+  position: relative;
+}
+
+table.calendar th .date {
+  font-size: 80%;
+  position: absolute;
+  top: 1em;
+  right: 1em;
+}

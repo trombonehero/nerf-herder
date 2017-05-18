@@ -43,3 +43,8 @@ if DATABASE_URL is None:
     sys.exit(1)
 
 REGISTRATION_IS_OPEN = os.environ.get("REGISTRATION_IS_OPEN")
+
+SITE_TITLE = os.environ.get('SITE_TITLE')
+if SITE_TITLE is None:
+    warnings.warn("SITE_TITLE not set, defaulting to 'DevSummit'")
+    SITE_TITLE = 'DevSummit'

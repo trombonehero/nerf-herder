@@ -21,6 +21,7 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+import config
 import db
 import flask
 import flask_bootstrap
@@ -68,7 +69,13 @@ def _db_close(exc):
 
 @frontend.route('/')
 def index():
-    return 'hi'
+    return flask.render_template('index.html')
+
+
+@frontend.route('/register/')
+def register():
+    return 'registration page'
+
 
 @frontend.route('/org/')
 @auth.login_required

@@ -1,0 +1,86 @@
+{%- extends "base.html" -%}
+
+{% import "bootstrap/utils.html" as utils %}
+
+{% block content %}
+<div class="container">
+  {{ super() }}
+
+  <div class="row">
+    <p>
+    The 2017 Cambridge DevSummit will be held 2&ndash;4 August.
+    </p>
+
+    <table class="calendar table">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Tue<span class="date">1</span></th>
+          <th colspan="2">Wed<span class="date">2</span></th>
+          <th colspan="2">Thu<span class="date">3</span></th>
+          <th colspan="2">Fri<span class="date">4</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="time">9am</td>
+          <td></td>
+          <td colspan="6">Registration / coffee</td>
+        </tr>
+        <tr>
+          <td class="time">10am</td>
+          <td></td>
+          <td class="track1" colspan="2">Welcome</td>
+          <td class="track1">TBA</td>
+          <td class="track2">TBA</td>
+          <td class="track1">TBA</td>
+          <td class="track2">TBA</td>
+        </tr>
+        <tr>
+          <td class="time">12:00pm</td>
+          <td></td>
+          <td colspan="6">Lunch</td>
+        </tr>
+        <tr>
+          <td class="time">1pm</td>
+          <td></td>
+          <td class="track1">TBA</td>
+          <td class="track2">TBA</td>
+          <td class="track1">TBA</td>
+          <td class="track2">TBA</td>
+          <td class="track1">TBA</td>
+          <td class="track2">TBA</td>
+        </tr>
+        <tr>
+          <td class="time">2:45pm</td>
+          <td></td>
+          <td colspan="6">Coffee</td>
+        </tr>
+        <tr>
+          <td class="time">3:15pm</td>
+          <td></td>
+          <td class="track1">TBA</td>
+          <td class="track2">TBA</td>
+          <td class="track1">TBA</td>
+          <td class="track2">TBA</td>
+          <td class="track1">TBA</td>
+          <td class="track2">TBA</td>
+        </tr>
+        <tr>
+          <td class="time">5pm</td>
+          <td></td>
+          <td colspan="6">Break</td>
+        </tr>
+        <tr>
+          <td class="time">Evening</td>
+          <td>Pub</td>
+          <td colspan="2">TBA</td>
+          <td colspan="2">TBA</td>
+          <td colspan="2">TBA</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}
