@@ -41,3 +41,5 @@ if DATABASE_URL is None:
     sys.stderr.write('  - echo "DATABASE_URL=sqlite://filename" > .env or\n')
     sys.stderr.write('  - export DATABASE_URL="..."\n')
     sys.exit(1)
+
+REGISTRATION_IS_OPEN = os.environ.get("REGISTRATION_IS_OPEN")
