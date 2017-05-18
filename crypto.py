@@ -35,6 +35,9 @@ if secret is None:
 
     secret = random.getrandbits(128)
 
+else:
+    secret = hashlib.sha512(secret).digest()
+
 def hmac(text):
     assert type(text) == str
     assert len(text) > 0
