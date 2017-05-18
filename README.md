@@ -11,6 +11,7 @@ nerf-herder is a Web-based tool for managing developer summits.
   * Postgres is recommended for production use
   * SQLite is suitable for local prototyping
 * Python packages:
+  * docopt
   * flask
   * flask-bootstrap
   * flask-nav
@@ -18,6 +19,7 @@ nerf-herder is a Web-based tool for managing developer summits.
   * flask-DotEnv
   * peewee
   * psycopg2 (for use with Postgres)
+  * python-dotenv
   * sqlite3 (for use with SQLite)
 * WSGI hosting software
   * [Apache + mod_wsgi](https://modwsgi.readthedocs.io/en/develop/)
