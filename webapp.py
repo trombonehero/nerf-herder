@@ -87,6 +87,11 @@ nav.nav.register_element('frontend_top',
     nav.Navbar(
         nav.View(config.SITE_TITLE, '.index'),
         nav.View('Register', '.register'),
+        nav.Subgroup(
+            'External',
+            nav.Link('Floor plans', 'https://www.cl.cam.ac.uk/maps'),
+            nav.Link('Wiki', 'https://wiki.freebsd.org/DevSummit/201708'),
+        ),
     )
 )
 
