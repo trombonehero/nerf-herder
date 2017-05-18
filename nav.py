@@ -24,5 +24,6 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import flask_nav
+from flask_nav.elements import *
 
 nav = flask_nav.Nav()

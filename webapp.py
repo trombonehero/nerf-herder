@@ -76,6 +76,14 @@ def admin():
     return 'admin'
 
 
+nav.nav.register_element('frontend_top',
+    nav.Navbar(
+        nav.View(config.SITE_TITLE, '.index'),
+        nav.View('Register', '.register'),
+    )
+)
+
+
 def create_app(dev_mode = True):
     # See http://flask.pocoo.org/docs/patterns/appfactories
     app = flask.Flask(__name__)
