@@ -51,6 +51,7 @@ if arguments['init']:
 elif arguments['run']:
     try: port = int(arguments['--port'])
     except ValueError:
+        import sys
         sys.stderr.write("Invalid port number: '%s'\n" % arguments['--port'])
         sys.exit(1)
 
