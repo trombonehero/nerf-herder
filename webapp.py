@@ -25,10 +25,36 @@ import db
 import flask
 import flask_bootstrap
 import flask_dotenv
+import flask_httpauth
 import nav
+import sys
 
+auth = flask_httpauth.HTTPBasicAuth()
 database = db.db
 frontend = flask.Blueprint('nerf-herder frontend', __name__)
+
+
+@auth.error_handler
+def auth_error():
+    return 'Authentication error'
+
+@auth.verify_password
+def verify_auth(username, password):
+    try: p = db.Person.get(username = username)
+    except db.Person.DoesNotExist:
+        sys.stderr.write("ERROR: invalid user '%s'\n" % username)
+        return False
+
+    if not p.administrator:
+        sys.stderr.write("ERROR: %s is not an administrator\n" % username)
+        return False
+
+    if password != x.auth():
+        sys.stderr.write("ERROR: %s used incorrect password\n" % username)
+        return False
+
+    return True
+
 
 @frontend.before_request
 def _db_connect():
@@ -39,10 +65,15 @@ def _db_close(exc):
     if not database.is_closed():
         database.close()
 
+
 @frontend.route('/')
 def index():
     return 'hi'
 
+@frontend.route('/org/')
+@auth.login_required
+def admin():
+    return 'admin'
 
 
 def create_app(dev_mode = True):
