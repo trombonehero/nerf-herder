@@ -1,16 +1,6 @@
-.navbar, .navbar.navbar-default
-{
-  background-color: #990000;
-}
-
 .navbar-inverse
 {
   background-color: black;
-}
-
-ul.nav.navbar-nav li.dropdown ul li a:hover
-{
-  color: #990000;
 }
 
 #logo
