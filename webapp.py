@@ -108,4 +108,8 @@ def create_app(dev_mode = True):
     app.config['BOOTSTRAP_SERVE_LOCAL'] = True
     app.config['TEMPLATES_AUTO_RELOAD'] = dev_mode
 
+    if not config.REGISTRATION_IS_OPEN:
+        import crypto
+        app.config['PREREGISTRATION_CODE'] = crypto.hmac('preregistration')
+
     return app

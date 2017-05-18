@@ -55,13 +55,12 @@ elif arguments['run']:
         sys.exit(1)
 
     import config
-    import crypto
     import webapp
 
     app = webapp.create_app()
 
     if not config.REGISTRATION_IS_OPEN:
         print(" * Registration not open yet: preregistration code is '%s'" %
-                crypto.hmac('preregistration'))
+                app.config['PREREGISTRATION_CODE'])
 
     app.run(port = port, debug = True)
