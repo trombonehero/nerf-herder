@@ -56,4 +56,3 @@ elif arguments['run']:
 
     app = webapp.create_app()
     app.run(port = port, debug = True)
-    sys.exit(0)
