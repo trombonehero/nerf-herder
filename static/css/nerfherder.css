@@ -8,6 +8,11 @@
   background-color: black;
 }
 
+ul.nav.navbar-nav li.dropdown ul li a:hover
+{
+  color: #990000;
+}
+
 #logo
 {
   width: 280px;
