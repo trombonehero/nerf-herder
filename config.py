@@ -23,6 +23,7 @@
 
 import dotenv
 import os
+import sys
 import warnings
 
 
@@ -30,10 +31,13 @@ dotenv_path = dotenv.find_dotenv()
 if dotenv_path == '':
     warnings.warn(
         'Unable to find a .env file, assuming environment-based configuration')
-
 else:
     dotenv.load_dotenv(dotenv_path)
 
 DATABASE_URL = os.environ.get("DATABASE_URL")
 if DATABASE_URL is None:
-    raise RuntimeError('no DATABASE_URL specified in .env or environment')
+    sys.stderr.write('No DATABASE_URL specified; need to do one of:\n')
+    sys.stderr.write('  - echo "DATABASE_URL=postgres://db_name" > .env or\n')
+    sys.stderr.write('  - echo "DATABASE_URL=sqlite://filename" > .env or\n')
+    sys.stderr.write('  - export DATABASE_URL="..."\n')
+    sys.exit(1)
