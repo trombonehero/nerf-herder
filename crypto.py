@@ -29,11 +29,15 @@ import os
 
 secret = os.environ.get("SECRET_KEY")
 if secret is None:
-    import random, warnings
+    import random, string, warnings
     warnings.warn(
         'No SECRET_KEY in .env or environment; generating one-time key\n')
 
-    secret = random.getrandbits(128)
+    secret = ''.join(
+            random.SystemRandom()
+                  .choice(string.ascii_uppercase + string.digits)
+            for _ in range(20)
+    )
 
 else:
     secret = hashlib.sha512(secret).digest()
