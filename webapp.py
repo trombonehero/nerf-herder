@@ -73,18 +73,71 @@ def index():
     return flask.render_template('index.html')
 
 
+@frontend.route('/attendee/<int:id>')
+def attendee(id):
+    try: p = db.Person.get(id = id)
+    except db.Person.DoesNotExist:
+        return 'no such person'
+
+    if flask.request.args.get('auth') != p.auth():
+        return 'noooope.'
+
+    return 'Person %d' % id
+
+
 @frontend.route('/register/', methods = [ 'GET', 'POST' ])
 def register():
+    if not config.REGISTRATION_IS_OPEN:
+        auth = flask.request.args.get('preregistration')
+        if auth != flask.current_app.config['PREREGISTRATION_CODE']:
+            return flask.render_template('registration-not-open.html')
+
     form = forms.RegistrationForm()
-    if form.validate_on_submit():
-        return 'thanks for registering'
+    form.host.choices = [ (-1, '') ] + [
+            (p.id, p.name) for p in db.Person.select()
+    ]
 
-    if (not config.REGISTRATION_IS_OPEN and
-        flask.request.args.get('preregistration')
-            != flask.current_app.config['PREREGISTRATION_CODE']):
-        return flask.render_template('registration-not-open.html')
+    if flask.request.method == 'POST':
+        if form.validate_on_submit():
+            email = form.email.data
+            if email is None or email == '':
+                assert form.username.data is not None
+                email = '%s@FreeBSD.org' % form.username.data
 
-    return flask.render_template('register.html')
+            host = form.host.data
+            if host == -1:
+                host = None
+
+            try:
+                p = db.Person.create(
+                    name = form.name.data,
+                    username = form.username.data,
+                    host = host,
+                    email = email,
+                    address = form.address.data,
+                    arrival = form.arrival.data,
+                    departure = form.departure.data,
+                    shirt_size = form.shirt_size.data,
+                    dietary_needs = form.dietary_needs.data,
+                )
+
+                flask.flash('Registration successful!')
+                return flask.redirect('/attendee/%d?auth=%s' % (
+                        p.id, p.auth()
+                ))
+
+            except db.peewee.IntegrityError, e:
+                flask.flash(u"Error: %s (have you already registered?)" % e,
+                            'error')
+
+        else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    flask.flash(u"Problem with '%s': %s" % (
+                        getattr(form, field).label.text, error),
+                        'error')
+
+    return flask.render_template('register.html', form = form)
 
 
 @frontend.route('/org/')

@@ -1,6 +1,74 @@
 {%- extends "base.html" -%}
 
+{%- import "form.html" as forms -%}
+
 {% import "bootstrap/utils.html" as utils %}
 
 {% block content %}
+  {{ super() }}
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        <form class="well bs-component" method="post">
+          <!-- CSRF protection -->
+          {{ form.hidden_tag() }}
+
+          <fieldset>
+            <legend>Register</legend>
+
+            {{ forms.field(form.name) }}
+
+            {{
+              forms.field(form.username,
+                help_text = "Your @FreeBSD.org username (if you have one)")
+            }}
+
+            {{ forms.field(form.host,
+                help_text = "Each guest must have a FreeBSD host") }}
+
+            {{
+              forms.field(form.email,
+                help_text = "Optional for for attendees with a FreeBSD username (we'll use username@FreeBSD.org if this field is blank)")
+            }}
+
+            {{
+              forms.field(form.address, rows = '4',
+                help_text = "Postal address for your payment receipt")
+            }}
+
+            {{
+              forms.field(form.arrival, extra_class = 'datepicker',
+                help_text = "Optional: leave blank for local or TBD")
+            }}
+
+            {{
+              forms.field(form.departure, extra_class = 'datepicker',
+                help_text = "Optional: leave blank for local or TBD")
+            }}
+
+            {{ forms.field(form.shirt_size) }}
+
+            {{ forms.field(form.dietary_needs,
+                help_text = "Allergies, dietary restrictions, etc.") }}
+
+            <div class="col-md-3 col-md-offset-9">
+              <button type="submit" class="btn btn-primary">
+                Register
+              </button>
+            </div>
+          </fieldset>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+
+  <script type="text/javascript">
+  $('#arrival').bootstrapMaterialDatePicker({ weekStart : 0, time: false });
+  $('#departure').bootstrapMaterialDatePicker({ weekStart : 0, time: false });
+  </script>
 {% endblock %}

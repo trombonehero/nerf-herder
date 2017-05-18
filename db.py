@@ -24,6 +24,7 @@
 import config
 import crypto
 import os
+import peewee
 from peewee import *
 
 

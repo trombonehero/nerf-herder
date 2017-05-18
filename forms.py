@@ -23,20 +23,28 @@
 
 from flask_wtf import FlaskForm
 from wtforms.fields import *
-from wtforms.widgets import HiddenInput
+from wtforms.widgets import HiddenInput, TextArea
 from wtforms.validators import Required, Email
+
+shirt_choices = [ (i,i) for i in ('', 'S', 'M', 'L', 'XL', '2XL', '3XL') ]
 
 class RegistrationForm(FlaskForm):
     name = TextField()
-    username = TextField('Name')
-    email = TextField('Email address', validators = [ Required() ])
-    address1 = TextField('Address 1', validators = [ Required() ])
-    address2 = TextField('Address 2', validators = [ Required() ])
-    address3 = TextField('Address 3')
-    address4 = TextField('Address 4')
+    username = TextField()
+    host = SelectField(coerce = int)
+    email = TextField('Email address')
+    address = TextField(widget = TextArea(), validators = [ Required() ])
     arrival = DateField()
     departure = DateField()
-    host = SelectField(u'Host', coerce = int)
-    shirt_size = SelectField()
+    shirt_size = SelectField(choices = shirt_choices)
     dietary_needs = TextField()
 
+    def validate(self):
+        if not FlaskForm.validate(self):
+            return False
+
+        if not self.username and not self.host:
+            self.host.errors.append("Guests require a host")
+            return False
+
+        return True
