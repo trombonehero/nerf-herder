@@ -32,6 +32,6 @@ According to [Wookiepedia](http://starwars.wikia.com):
 > Despite their usefulness, nerfs were often regarded as disgusting because of their strong body odor.
 
 Software developers are useful people but sometimes a bit unwieldy to
-herd without tools to help.
+herd without proper tools.
 Also, at least in the FreeBSD context, they can sometimes be a bit furry.
 Any further comparisions between developers and nerfs are disclaimed.
