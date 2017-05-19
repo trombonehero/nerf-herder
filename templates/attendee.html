@@ -28,7 +28,7 @@
                 {{ attendee.username }}@FreeBSD.org
               </h3>
             {%- endif -%}
-            {%- if attendee.email != (attendee.username + '@FreeBSD.org') -%}
+            {%- if not attendee.email.endswith('@FreeBSD.org') -%}
               <h3 class="email">
                 {{ attendee.email }}
               </h3>
@@ -50,24 +50,28 @@
           </div>
         {% endif %}
 
-        <div class="col-md-4">
+        <div class="col-md-6">
           <h2>Bookings</h2>
 
-          <ul>
-            {% for booking in bookings %}
-              <li>
-                {{ booking.item.description }}
-                {% if booking.item.note %}
-                  <div class="special-note">{{ booking.item.note }}</div>
-                {% endif %}
-              </li>
-            {% endfor %}
-          </ul>
+          <table class="table">
+            <tbody>
+              {% for booking in bookings %}
+                <tr>
+                  <td>
+                    {{ booking.item.description }}
+                    {% if booking.item.note %}
+                      <p class="bs-info">{{ booking.item.note }}</div>
+                    {% endif %}
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-6">
           <h2>Purchases</h2>
-          <table class="invoice">
+          <table class="invoice table">
             <thead>
               <tr>
                 <th>Quantity</th>
@@ -79,7 +83,7 @@
             <tfoot>
               <tr>
                 <td colspan="3">Total</td>
-                <td class="money">{{ attendee.total_purchases() }}</td>
+                <td class="money">{{ attendee.total_purchases() | safe }}</td>
               </tr>
             </tfoot>
 
@@ -88,14 +92,16 @@
                 <tr>
                   <td>{{ p.quantity }}</td>
                   <td>{{ p.item.description }}</td>
-                  <td class="money">{{ p.item.price() }}</td>
-                  <td class="money">{{ p.attendee.total_purchases()() }}</td>
+                  <td class="money">{{ p.item.price() | safe }}</td>
+                  <td class="money">{{ p.buyer.total_purchases() | safe }}</td>
                 </tr>
               {% endfor %}
             </tbody>
           </table>
+        </div>
 
-          <h3>Anything else?</h3>
+        <div class="col-md-6">
+          <h2>Anything else?</h2>
           <form action="buy" method="post">
             <input type="hidden" name="buyer" value="{{ attendee.id }}"/>
             <input type="hidden" name="auth" value="{{ attendee.auth() }}"/>
@@ -104,9 +110,9 @@
           </form>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-6">
           <h2>Payments</h2>
-          <table class="invoice">
+          <table class="invoice table">
             <thead>
               <tr>
                 <th>Date</th>
@@ -116,7 +122,7 @@
             <tfoot>
               <tr>
                 <td>Total</td>
-                <td class="money">{{ attendee.paid() }}</td>
+                <td class="money">{{ attendee.paid() | safe }}</td>
               </tr>
             </tfoot>
 
@@ -124,7 +130,7 @@
               {% for p in attendee.payments %}
                 <tr>
                   <td>{{ p.date.strftime("%d %b %Y") }}</td>
-                  <td class="money">{{ p }}</td>
+                  <td class="money">{{ p | safe }}</td>
                 </tr>
               {% endfor %}
             </tbody>
