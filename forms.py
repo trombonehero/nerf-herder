@@ -48,4 +48,9 @@ class RegistrationForm(FlaskForm):
                     "Guests without a FreeBSD username require a host")
             return False
 
+        if self.username.data != '' and self.host.data != -1:
+            self.host.errors.append(
+                    "People with @FreeBSD.org usernames do not require a host")
+            return False
+
         return True
