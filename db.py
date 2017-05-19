@@ -208,7 +208,7 @@ class Purchase(BaseModel):
     """
 
     buyer = ForeignKeyField(Person, related_name = 'purchases')
-    item = ForeignKeyField(Person, related_name = 'item_purchases')
+    item = ForeignKeyField(Product, related_name = 'purchases')
     quantity = IntegerField()
     date = DateField()
 
