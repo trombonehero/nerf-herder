@@ -3,15 +3,6 @@
   background-color: black;
 }
 
-#logo
-{
-  width: 280px;
-
-  position: absolute;
-  bottom: 1em;
-  right: 0;
-}
-
 .address
 {
   white-space: pre-wrap;
