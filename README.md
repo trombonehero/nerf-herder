@@ -22,8 +22,96 @@ nerf-herder is a Web-based tool for managing developer summits.
   * python-dotenv
   * sqlite3 (for use with SQLite)
 * WSGI hosting software
-  * [Apache + mod_wsgi](https://modwsgi.readthedocs.io/en/develop/)
-  * [Nginx + uWSGI](https://www.digitalocean.com/community/tutorials/how-to-deploy-python-wsgi-applications-using-uwsgi-web-server-with-nginx)
+  * Apache + [mod_wsgi](https://modwsgi.readthedocs.io/en/develop/)
+  * Nginx + [uWSGI](https://uwsgi-docs.readthedocs.io/en/latest/)
+
+
+## Deploying `nerf-herder`
+
+### Configuration
+
+Configuration of nerf-herder itself is done via either environment variables
+or a `.env` file.
+A sample `.env` file has been included at [samples/dot-env](samples/dot-env).
+Copy this file into the directory you want to run nerf-herder from
+(i.e., your source directory on the production server)
+and customize it as appropriate.
+
+
+### Postgres
+
+When running the Cambridge DevSummit, we use Postgres as our production
+database.
+We initialize the database as follows, assuming a username `jon` for myself,
+`www` for the Nginx user and a registration cost of £65.00
+(or $65.00, or €65.00, or...):
+
+```sh
+[me@bsdcam]$ sudo su - pgsql
+$ psql postgres
+psql (9.2.20, server 9.2.19)
+Type "help" for help.
+
+postgres=# create database bsdcam_2017;
+CREATE DATABASE
+postgres=# create role jon with login;
+CREATE ROLE
+postgres=# create role www with login;
+CREATE ROLE
+postgres=# grant all on database foo to jon;
+GRANT
+postgres=# grant all on database foo to www;
+GRANT
+postgres=# \q
+$ exit
+[me@bsdcam]$ cd /usr/local/www/nerf-herder
+[me@bsdcam]$ ./nerfherd init
+[me@bsdcam]$ psql bsdcam_2017 -c "update product set cost=6500 where name='Registration'"
+UPDATE 1
+```
+
+
+### Nginx and uWSGI
+
+First, we need to arrange for uWSGI to run nerf-herder.
+Copy [samples/uwsgi.ini](samples/uwsgi.ini) to somewhere handy
+(`/usr/local/etc/ngix`, `/var/www`, etc.) and customize it.
+For example, to run the Cambridge DevSummit we use:
+
+```ini
+[uwsgi]
+chdir = /usr/local/www/nerf-herder
+wsgi-file = /usr/local/www/nerf-herder/wsgi.py
+uid = www
+gid = wheel
+socket = 127.0.0.1:3031
+stats = 127.0.0.1:9191
+```
+
+On FreeBSD, we add the following to `/etc/rc.conf`:
+
+```sh
+uwsgi_enable="YES"
+uwsgi_flags="--ini /usr/local/www/nerf-herder.ini"
+```
+
+Then we start uWSGI with `service uwsgi start`.
+Progress will be logged to the default location,
+`/var/log/uwsgi.log` (but this can be customized with the `logto` directive
+in your uWSGI INI file).
+
+Once that's done, Nginx configuration is very simple.
+Inside the relevant `server` section:
+
+```
+location / {
+  uwsgi_pass 127.0.0.1:3031;
+  include uwsgi_params;
+}
+```
+
+Then we start Nginx with `service nginx start`.
+
 
 ## About the name
 
