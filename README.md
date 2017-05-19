@@ -69,6 +69,8 @@ $ exit
 [me@bsdcam]$ psql bsdcam_2017
 bsdcam_2017=> grant select, update, insert on all tables in schema public to www;
 GRANT
+bsdcam_2017=> grant usage, select on all sequences in schema public to www;
+GRANT
 bsdcam_2017=> update product set cost=6500 where name='Registration'
 UPDATE 1
 bsdcam_2017=> \q
