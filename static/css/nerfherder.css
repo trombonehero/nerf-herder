@@ -12,6 +12,11 @@
   right: 0;
 }
 
+.address
+{
+  white-space: pre-wrap;
+}
+
 table.calendar
 {
   border-spacing: .5em;

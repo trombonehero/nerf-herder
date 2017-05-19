@@ -153,6 +153,12 @@ class Person(BaseModel):
     def auth(self):
         return crypto.hmac(str(self.id))
 
+    def paid(self):
+        return sum([ p.amount() for p in self.payments ])
+
+    def total_purchases(self):
+        return sum([ p.total() for p in self.purchases ])
+
     def __str__(self):
         return self.name
 

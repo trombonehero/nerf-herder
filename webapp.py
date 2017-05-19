@@ -96,7 +96,8 @@ def attendee(id):
     try:
         p = db.Person.get(id = id)
         if flask.request.args.get('auth') == p.auth():
-            return 'Person %d' % id
+            return flask.render_template('attendee.html',
+                attendee = p, products = db.Product.select())
 
     except db.Person.DoesNotExist:
         pass

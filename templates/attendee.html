@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+{% import 'form.html' as form %}
+
+{% set title = 'Registration' %}
+
+{% block content %}
+  <div class="container">
+    <h1 class="page-header">Registration confirmed</h1>
+
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <div class="row">
+          <div class="col-md-8">
+            <h2>{{ attendee.name }}</h2>
+            {% if attendee.host %}
+              <div class="host">
+                Hosted by {{ attendee.host }}
+              </div>
+            {% endif %}
+            {% if attendee.arrival and attendee.departure %}
+                {{ attendee.arrival.strftime("%d %b %Y") }} &mdash; {{ attendee.departure.strftime("%d %b %Y") }}
+            {% endif %}
+          </div>
+
+          <div class="col-md-4">
+            {%- if attendee.username %}
+              <h3 class="email">
+                {{ attendee.username }}@FreeBSD.org
+              </h3>
+            {%- endif -%}
+            {%- if attendee.email != (attendee.username + '@FreeBSD.org') -%}
+              <h3 class="email">
+                {{ attendee.email }}
+              </h3>
+              <div class="address">{{ attendee.address }}</div>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-body">
+        {% if attendee.diet %}
+          <div class="panel panel-warning">
+            <div class="panel-heading">
+              Dietary needs
+            </div>
+            <div class="panel-body">
+              {{ attendee.diet }}
+            </div>
+          </div>
+        {% endif %}
+
+        <div class="col-md-4">
+          <h2>Bookings</h2>
+
+          <ul>
+            {% for booking in bookings %}
+              <li>
+                {{ booking.item.description }}
+                {% if booking.item.note %}
+                  <div class="special-note">{{ booking.item.note }}</div>
+                {% endif %}
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        <div class="col-md-4">
+          <h2>Purchases</h2>
+          <table class="invoice">
+            <thead>
+              <tr>
+                <th>Quantity</th>
+                <th>Item</th>
+                <th>Cost</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tfoot>
+              <tr>
+                <td colspan="3">Total</td>
+                <td class="money">{{ attendee.total_purchases() }}</td>
+              </tr>
+            </tfoot>
+
+            <tbody>
+              {% for p in attendee.purchases %}
+                <tr>
+                  <td>{{ p.quantity }}</td>
+                  <td>{{ p.item.description }}</td>
+                  <td class="money">{{ p.item.price() }}</td>
+                  <td class="money">{{ p.attendee.total_purchases()() }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+
+          <h3>Anything else?</h3>
+          <form action="buy" method="post">
+            <input type="hidden" name="buyer" value="{{ attendee.id }}"/>
+            <input type="hidden" name="auth" value="{{ attendee.auth() }}"/>
+            {{ form.chooser('item', products) }}
+            <input type="submit" class="btn" value="Book / Buy"/>
+          </form>
+        </div>
+
+        <div class="col-md-4">
+          <h2>Payments</h2>
+          <table class="invoice">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Amount</th>
+              </tr>
+            </thead>
+            <tfoot>
+              <tr>
+                <td>Total</td>
+                <td class="money">{{ attendee.paid() }}</td>
+              </tr>
+            </tfoot>
+
+            <tbody>
+              {% for p in attendee.payments %}
+                <tr>
+                  <td>{{ p.date.strftime("%d %b %Y") }}</td>
+                  <td class="money">{{ p }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+
+          {% if attendee.paid() < attendee.total_purchases() %}
+            <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+              <input type="hidden" name="cmd" value="_ext-enter" />
+              <input type="hidden" name="redirect_cmd" value="_xclick" />
+              <input type="hidden" name="item_name" value="Cambridge DevSummit" />
+              <input type="hidden" name="email" values="{{ attendee.email }}" />
+              <input type="hidden" name="custom" value="{{ attendee.email }}" />
+              <input type="hidden" name="amount" value="{{ attendee.total_purchases() - attendee.paid() }}" />
+              <input type="hidden" name="business" value="rwatson@FreeBSD.org" />
+              <input type="hidden" name="return" value="https://bsdcam.cl.cam.ac.uk/attendee/{{ attendee.id }}?auth={{ attendee.auth() }}"/>
+              <input type="hidden" name="currency_code" value="GBP" />
+              <input type="submit" class="btn btn-primary" value="Pay with PayPal" />
+            </form>
+
+            <button class="btn btn-primary" data-toggle="collapse"
+                data-target="#bank-details">
+              Pay by bank transfer
+            </button>
+
+            <div id="bank-details" class="collapse panel panel-info">
+              <div class="panel-heading">
+                Bank account details
+              </div>
+
+              <div class="address panel-body">Name: FreeBSD Developer Summit
+Bank: HSBC Bank PLC
+Sort code: 40-16-08
+Account number: 92781026
+BIC / SWIFT code: MIDLGB22
+IBAN: GB36MIDL40160892781026</div>
+
+              <div class="panel-footer bg-info">
+                Payments may not appear for several days;
+                please do not pay twice!
+              </div>
+            </div>
+
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="panel-footer">
+        To make other changes or discuss special requirements
+        (e.g. additional guests), please e-mail the organisers at
+        <a href="mailto:cl-bsdcam-organisers@lists.cam.ac.uk">cl-bsdcam-organisers@lists.cam.ac.uk</a>.
+      </div>
+    </div>
+  </div>
+{% endblock %}
