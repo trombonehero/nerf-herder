@@ -36,6 +36,7 @@ A sample `.env` file has been included at [samples/dot-env](samples/dot-env).
 Copy this file into the directory you want to run nerf-herder from
 (i.e., your source directory on the production server)
 and customize it as appropriate.
+**This file contains a secret key: don't forget `chmod 400 .env`!**
 
 
 ### Postgres
