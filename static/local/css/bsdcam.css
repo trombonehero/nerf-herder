@@ -2,7 +2,9 @@
 {
   width: 280px;
 
-  position: absolute;
+  position: fixed;
   bottom: 1em;
   right: 0;
+
+  z-index: 99;
 }
