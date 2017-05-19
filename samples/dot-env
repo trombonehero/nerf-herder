@@ -1,0 +1,5 @@
+CURRENCY=GBP
+CURRENCY_SYMBOL=&pound;
+DATABASE_URL=sqlite://test.db
+SECRET_KEY="something secret here... I use `apg -a 1` to generate secrets"
+SITE_TITLE="2017 Cambridge DevSummit"
