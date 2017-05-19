@@ -29,10 +29,10 @@ import smtplib
 
 replyto = os.environ.get("MAIL_REPLYTO")
 
-def send(recipients, subject, text):
+def send(recipients, subject, body):
     assert type(recipients) == tuple or type(recipients) == list
 
-    msg = MIMEText(text.encode('utf-8'), 'plain', 'utf-8')
+    msg = MIMEText(body.encode('utf-8'), 'plain', 'utf-8')
     msg['Subject'] = Header(subject, 'utf-8')
     msg['From'] = os.environ.get("MAIL_FROM")
     msg['Reply-To'] = replyto
