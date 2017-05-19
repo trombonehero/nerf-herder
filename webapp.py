@@ -29,6 +29,7 @@ import flask_bootstrap
 import flask_dotenv
 import flask_httpauth
 import forms
+import mail
 import nav
 import sys
 
@@ -161,6 +162,12 @@ def register():
                 )
 
                 flask.flash('Registration successful!')
+
+                mail.send([ p.email ],
+                        subject = '%s registration' % config.SITE_TITLE,
+                        body = flask.render_template(
+                                'registration-email.txt', attendee = p)
+                )
 
                 return flask.redirect('/attendee/%d?auth=%s' % (
                         p.id, p.auth()

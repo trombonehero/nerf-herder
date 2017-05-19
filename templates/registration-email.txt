@@ -1,0 +1,23 @@
+Hi {{ attendee.name }},
+
+Thanks for registering for the Cambridge DevSummit! To pay the registration fee
+or view your details, please visit:
+
+https://bsdcam.cl.cam.ac.uk/registration/{{ attendee.id }}?auth={{ attendee.auth() }}
+
+This form won't let you change details you've already entered; to do that
+you'll need to e-mail us at:
+
+cl-bsdcam-organisers@lists.cam.ac.uk
+
+That's also the address to use if you have any questions about the DevSummit.
+
+If you haven't already done so, please sign yourself up on the Wiki page:
+https://wiki.freebsd.org/DevSummit/201708
+
+We're looking forward to seeing you in Cambridge!
+
+Sincerely,
+
+
+The Organisers (rwatson@ et al.)
