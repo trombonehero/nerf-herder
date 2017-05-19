@@ -255,3 +255,9 @@ def init(drop_first = True):
         db.drop_tables(ALL_TABLES, safe = True)
 
     db.create_tables(ALL_TABLES)
+
+    Product.create(
+        name = 'Registration',
+        description = 'Normal registration',
+        cost = 0,     # admins should fix this up before opening registration
+    )
