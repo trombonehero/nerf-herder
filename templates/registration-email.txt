@@ -3,7 +3,7 @@ Hi {{ attendee.name }},
 Thanks for registering for the Cambridge DevSummit! To pay the registration fee
 or view your details, please visit:
 
-https://bsdcam.cl.cam.ac.uk/registration/{{ attendee.id }}?auth={{ attendee.auth() }}
+https://bsdcam.cl.cam.ac.uk/attendee/{{ attendee.id }}?auth={{ attendee.auth() }}
 
 This form won't let you change details you've already entered; to do that
 you'll need to e-mail us at:
