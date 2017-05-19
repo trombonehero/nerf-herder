@@ -1,0 +1,17 @@
+{% macro field(field, help_text = '', extra_class = '', rows = "1") %}
+<div class="form-group label-floating">
+  <label for="{{ field.name }}" class="control-label">{{ field.label }}</label>
+  {{ field(class = "form-control " + extra_class, rows = rows) }}
+  <p class="help-block">{{ help_text }}</p>
+</div>
+{% endmacro %}
+
+{% macro chooser(name, options, current = None) %}
+<select name="{{ name }}">
+<option value=""/>
+{% for o in options -%}
+{%- set select = ' selected' if (o == current) else '' -%}
+<option value="{{ o.id }}"{{ select }}>{{ o | safe }}</option>
+{% endfor -%}
+</select>
+{% endmacro %}
