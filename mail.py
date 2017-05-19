@@ -26,11 +26,16 @@ from email.header import Header
 from email.mime.text import MIMEText
 import os
 import smtplib
+import warnings
 
 replyto = os.environ.get("MAIL_REPLYTO")
 
 def send(recipients, subject, body):
     assert type(recipients) == tuple or type(recipients) == list
+
+    if replyto is None:
+        warnings.warn('MAIL_REPLYTO not set, not mailing %s' % recipients)
+        return
 
     msg = MIMEText(body.encode('utf-8'), 'plain', 'utf-8')
     msg['Subject'] = Header(subject, 'utf-8')
