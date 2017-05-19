@@ -60,14 +60,19 @@ postgres=# create role www with login;
 CREATE ROLE
 postgres=# grant all on database foo to jon;
 GRANT
-postgres=# grant all on database foo to www;
+postgres=# grant connect on database foo to www;
 GRANT
 postgres=# \q
 $ exit
 [me@bsdcam]$ cd /usr/local/www/nerf-herder
 [me@bsdcam]$ ./nerfherd init
-[me@bsdcam]$ psql bsdcam_2017 -c "update product set cost=6500 where name='Registration'"
+[me@bsdcam]$ psql bsdcam_2017
+bsdcam_2017=> grant select, update, insert on all tables in schema public to www;
+GRANT
+bsdcam_2017=> update product set cost=6500 where name='Registration'
 UPDATE 1
+bsdcam_2017=> \q
+[me@bsdcam]$
 ```
 
 
@@ -111,6 +116,14 @@ location / {
 ```
 
 Then we start Nginx with `service nginx start`.
+
+
+## User admin
+
+The first user to register will be treated as an administrator.
+To make sure that first user is you, run the server without any
+`REGISTRATION_IS_OPEN` keys in your `.env` file.
+
 
 
 ## About the name
