@@ -22,6 +22,7 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import config
+import datetime
 import db
 import flask
 import flask_bootstrap
@@ -131,6 +132,7 @@ def register():
                 host = None
 
             try:
+                # Create the person in the database:
                 p = db.Person.create(
                     name = form.name.data,
                     username = form.username.data,
@@ -143,13 +145,22 @@ def register():
                     dietary_needs = form.dietary_needs.data,
                 )
 
-                flask.flash('Registration successful!')
-
                 if db.Person.select().count() == 1:
                     flask.flash('''You are the first registrant;
                         granting administrative privileges''')
                     p.administrator = True
                     p.save()
+
+                # Buy the "registration" product:
+                registration = db.Product.get(name = 'Registration')
+                db.Purchase.create(
+                    buyer = p,
+                    item = registration,
+                    quantity = 1,
+                    date = datetime.datetime.now()
+                )
+
+                flask.flash('Registration successful!')
 
                 return flask.redirect('/attendee/%d?auth=%s' % (
                         p.id, p.auth()
