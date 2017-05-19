@@ -21,5 +21,13 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+import config
 import webapp
+
 application = webapp.create_app()
+
+if config.REGISTRATION_IS_OPEN:
+    print(" * Registration is OPEN")
+else:
+    print(" * Registration is NOT OPEN: pregistration code is '%s'" %
+            application.config['PREREGISTRATION_CODE'])
