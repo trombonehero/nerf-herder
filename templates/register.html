@@ -68,7 +68,21 @@
   {{ super() }}
 
   <script type="text/javascript">
-  $('#arrival').bootstrapMaterialDatePicker({ weekStart : 0, time: false });
-  $('#departure').bootstrapMaterialDatePicker({ weekStart : 0, time: false });
+  $('#arrival').bootstrapMaterialDatePicker({
+    weekStart : 0,
+    clearButton: true,
+    minDate: '2017-07-30',
+    maxDate: '2017-08-04',
+    time: false,
+    year: false
+  });
+  $('#departure').bootstrapMaterialDatePicker({
+    weekStart : 0,
+    clearButton: true,
+    minDate: '2017-08-02',
+    maxDate: '2017-08-07',
+    time: false,
+    year: false
+  });
   </script>
 {% endblock %}
