@@ -42,7 +42,7 @@ and customize it as appropriate.
 
 When running the Cambridge DevSummit, we use Postgres as our production
 database.
-We initialize the database as follows, assuming a username `jon` for myself,
+We initialize the database as follows, assuming a username `me` for yourself,
 `www` for the Nginx user and a registration cost of £65.00
 (or $65.00, or €65.00, or...):
 
@@ -54,11 +54,11 @@ Type "help" for help.
 
 postgres=# create database bsdcam_2017;
 CREATE DATABASE
-postgres=# create role jon with login;
+postgres=# create role me with login;
 CREATE ROLE
 postgres=# create role www with login;
 CREATE ROLE
-postgres=# grant all on database foo to jon;
+postgres=# grant all privileges on database foo to me;
 GRANT
 postgres=# grant connect on database foo to www;
 GRANT
