@@ -38,7 +38,7 @@ frontend = flask.Blueprint('nerf-herder frontend', __name__)
 
 @auth.error_handler
 def auth_error():
-    return 'Authentication error'
+    return render_error(401, "This page is only available to the organizers")
 
 @auth.verify_password
 def verify_auth(username, password):
@@ -51,7 +51,7 @@ def verify_auth(username, password):
         sys.stderr.write("ERROR: %s is not an administrator\n" % username)
         return False
 
-    if password != x.auth():
+    if password != p.auth():
         sys.stderr.write("ERROR: %s used incorrect password\n" % username)
         return False
 
@@ -68,6 +68,24 @@ def _db_close(exc):
         database.close()
 
 
+
+def render_error(code, message, *args):
+    error_codes = {
+        400: 'Bad Request',
+        401: 'Unauthorized',
+        403: 'Forbidden',
+        404: 'Not Found',
+    }
+
+    response = flask.render_template('error.html',
+        title = '%d %s' % (code, error_codes[code]),
+        message = message,
+        details = args
+    )
+
+    return (response, code)
+
+
 @frontend.route('/')
 def index():
     return flask.render_template('index.html')
@@ -75,14 +93,17 @@ def index():
 
 @frontend.route('/attendee/<int:id>')
 def attendee(id):
-    try: p = db.Person.get(id = id)
+    try:
+        p = db.Person.get(id = id)
+        if flask.request.args.get('auth') == p.auth():
+            return 'Person %d' % id
+
     except db.Person.DoesNotExist:
-        return 'no such person'
+        pass
 
-    if flask.request.args.get('auth') != p.auth():
-        return 'noooope.'
-
-    return 'Person %d' % id
+    return render_error(401,
+            "Access to an attendee's details requires an authorization code",
+            "example: /attendee/42?auth=jp2v55degrkqtlj4o3qk")
 
 
 @frontend.route('/register/', methods = [ 'GET', 'POST' ])
