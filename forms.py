@@ -34,8 +34,10 @@ class RegistrationForm(FlaskForm):
     host = SelectField(coerce = int)
     email = TextField('Email address')
     address = TextField(widget = TextArea(), validators = [ Required() ])
-    arrival = DateField(validators = [ Optional() ])
-    departure = DateField(validators = [ Optional() ])
+    arrival = DateField('Arrival date (or empty if local)',
+                        validators = [ Optional() ])
+    departure = DateField('Departure date (or empty if local)',
+                          validators = [ Optional() ])
     shirt_size = SelectField(choices = shirt_choices)
     dietary_needs = TextField()
 
