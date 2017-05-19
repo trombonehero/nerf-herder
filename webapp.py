@@ -143,6 +143,13 @@ def register():
                 )
 
                 flask.flash('Registration successful!')
+
+                if db.Person.select().count() == 1:
+                    flask.flash('''You are the first registrant;
+                        granting administrative privileges''')
+                    p.administrator = True
+                    p.save()
+
                 return flask.redirect('/attendee/%d?auth=%s' % (
                         p.id, p.auth()
                 ))
