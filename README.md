@@ -1,6 +1,9 @@
 # nerf-herder
 
 nerf-herder is a Web-based tool for managing developer summits.
+It is a system of shining parts: Flask, Bootstrap, Material Design,
+WTForms with CSRF protection... all the latest toys.
+
 
 ## Requirements
 
