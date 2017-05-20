@@ -1,10 +1,10 @@
 #logo
 {
-  width: 280px;
+  width: 260px;
 
   position: fixed;
-  bottom: 1em;
-  right: 0;
+  bottom: -4px;
+  right: -36px;
 
   z-index: 99;
 }
