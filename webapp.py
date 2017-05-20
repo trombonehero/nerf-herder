@@ -190,17 +190,35 @@ def register():
 @frontend.route('/org/')
 @auth.login_required
 def admin():
-    return flask.render_template('admin/summary.html',
+    bookings = db.Product.select().where(db.Product.cost == 0)
+    products = db.Product.select().where(db.Product.cost > 0)
+    total_purchases = sum([ p.all_purchases() for p in products ])
+
+    payments = db.Payment.select().order_by(db.Payment.date)
+
+    balances = db.Person.balances()
+    balance = sum(balances.values())
+    balances = sorted(balances.items(), key = lambda (k,v): v, reverse = True)
+
+    return flask.render_template('admin/index.html',
         config = config,
         attendees = db.Person.select(),
+        balance = balance,
+        balances = balances,
+        bookings = bookings,
+        payments = payments,
+        products = products,
         show_admin_links = True,
+        todos = db.Todo.select().where(db.Todo.complete == False),
+        total_payments = sum([ p.amount() for p in payments ]),
+        total_purchases = total_purchases,
         prereg = flask.current_app.config['PREREGISTRATION_CODE'],
     )
 
 @frontend.route('/org/attendees/')
 @auth.login_required
 def admin_attendees():
-    return flask.render_template('admin/summary.html',
+    return flask.render_template('admin/index.html',
         config = config,
         attendees = db.Person.select(),
         show_admin_links = True,
@@ -209,7 +227,7 @@ def admin_attendees():
 @frontend.route('/org/poi/')
 @auth.login_required
 def admin_poi():
-    return flask.render_template('admin/summary.html',
+    return flask.render_template('admin/index.html',
         config = config,
         attendees = db.Person.select(),
         show_admin_links = True,
@@ -218,7 +236,7 @@ def admin_poi():
 @frontend.route('/org/products/')
 @auth.login_required
 def admin_products():
-    return flask.render_template('admin/summary.html',
+    return flask.render_template('admin/index.html',
         config = config,
         attendees = db.Person.select(),
         show_admin_links = True,
@@ -227,7 +245,7 @@ def admin_products():
 @frontend.route('/org/purchases/')
 @auth.login_required
 def admin_purchases():
-    return flask.render_template('admin/summary.html',
+    return flask.render_template('admin/index.html',
         config = config,
         attendees = db.Person.select(),
         show_admin_links = True,
@@ -236,7 +254,7 @@ def admin_purchases():
 @frontend.route('/org/payments/')
 @auth.login_required
 def admin_payments():
-    return flask.render_template('admin/summary.html',
+    return flask.render_template('admin/index.html',
         config = config,
         attendees = db.Person.select(),
         show_admin_links = True,
@@ -245,7 +263,7 @@ def admin_payments():
 @frontend.route('/org/todo/')
 @auth.login_required
 def admin_todo():
-    return flask.render_template('admin/summary.html',
+    return flask.render_template('admin/index.html',
         config = config,
         attendees = db.Person.select(),
         show_admin_links = True,

@@ -1,0 +1,196 @@
+{% extends "admin/base.html" %}
+{% import 'form.html' as form %}
+
+{% block content %}
+
+{{ super() }}
+
+<div class="container">
+  <div class="col-md-12">
+    <div class="panel">
+      <div class="panel-heading"><h4>Summary</h4></div>
+      <div class="panel-body">
+        <p>
+          Registration is
+          <b>{% if not config.REGISTRATION_IS_OPEN %}not{% endif %} open</b>.
+          The preregistration code is
+          <a href="/register?preregistration={{ prereg }}" target="_blank">
+            {{ prereg }}</a>.
+        </p>
+
+        <p>
+          {{ attendees.count() }} registered <a href="attendees">attendees</a>
+          (<a href="attendees.csv">download in CSV format</a>,
+            <a href="attendee-emails">text format</a> or
+            <a id="copier" href="#"
+              data-clipboard-text="{% for a in attendees %}{{ a.email }},{% endfor %}"
+            >
+              copy addresses to clipboard
+            </a>):
+        </p>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.12/clipboard.min.js"></script>
+        <script type="text/javascript">
+        new Clipboard('#copier');
+        </script>
+
+        <p>
+          {{ total_payments }} paid in (out of {{ total_purchases | safe }}).
+        </p>
+
+        <table class="table">
+          <thead>
+            <tr>
+              {% for (day,count) in day_counts %}<th>{{ day }}</th>{% endfor %}
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              {% for (day,count) in day_counts %}<td>{{ count }}</td>{% endfor %}
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-12">
+    <div class="panel panel-primary">
+      <div class="panel-heading"><h4>Things to do</h4></div>
+      <div class="panel-body">
+        <table class="table">
+          <thead>
+            <tr><th>Description</th><th>Deadline</th><th>Assigned to</th></tr>
+          </thead>
+
+          <tbody>
+            {% for t in todos %}
+              <tr class="{{ 'done' if t.complete }}">
+                <td>{{ t.description }}</td>
+                <td>{{ t.deadline.strftime('%b %d %H:%M') if t.deadline }}</td>
+                <td>{{ t.assignee }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="panel panel-info">
+      <div class="panel-heading"><h4>Bookings</h4></div>
+      <div class="panel-body">
+        <table class="table">
+          <tbody>
+            {% for b in bookings %}
+              <tr>
+                <td>
+                  <a href="purchases?product={{ b.id }}">{{ b.description }}</a>
+                </td>
+                <td>{{ b.quantity() }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="panel panel-info">
+      <div class="panel-heading"><h4>Orders</h4></div>
+      <div class="panel-body">
+        <table class="table">
+          <thead>
+            <th>Description</th>
+            <th class="money">Unit cost</th>
+            <th>Quantity</th>
+            <th class="money">Total</th>
+          </thead>
+          <tfoot>
+            <td colspan="2"></td>
+            <td>Total</td>
+            <td class="money">{{ total_purchases | safe }}</td>
+          </tfoot>
+          <tbody>
+            {% for p in products %}
+              <tr>
+                <td>
+                  <a href="purchases?product={{ p.id }}">{{ p.description }}</a>
+                </td>
+                <td class="money">{{ p.price() | safe }}</td>
+                <td>{{ p.quantity() }}</td>
+                <td class="money">{{ p.all_purchases() | safe }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="panel panel-success">
+      <div class="panel-heading"><h4>Payments</h4></div>
+      <div class="panel-body">
+        <table class="table">
+          <thead>
+            <th>Date</th>
+            <th>Payer</th>
+            <th class="money">Amount</th>
+          </thead>
+          <tfoot>
+            <td></td>
+            <td>Total</td>
+            <td class="money">{{ total_payments | safe }}</td>
+          </tfoot>
+          <tbody>
+            {% for p in payments %}
+              <tr>
+                <td>{{ p.date.strftime('%H:%m %d-%b-%Y') }}</td>
+                <td>
+                  <a href="/attendee/{{ p.payer.id }}?auth={{ p.payer.auth() }}"
+                    target="_blank">{{ p.payer }}</a>
+                </td>
+                <td class="money">{{ p.amount() | safe }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="panel panel-danger">
+      <div class="panel-heading"><h4>Balances owing</h4></div>
+      <div class="panel-body">
+        <table class="table">
+          <thead>
+            <th>Attendee</th>
+            <th class="money">Owes us</th>
+          </thead>
+          <tfoot>
+            <td>Total</td>
+            <td class="money">{{ balance | safe }}</td>
+          </tfoot>
+          <tbody>
+            {% for (p,b) in balances %}
+              {% if b != 0 %}
+                <tr>
+                  <td>
+                    <a href="/attendee/{{ p.id }}?auth={{ p.auth() }}"
+                      target="_blank">{{ p }}</a>
+                  </td>
+                  <td class="money">{{ b | safe }}</td>
+                </tr>
+              {% endif %}
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
