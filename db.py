@@ -153,6 +153,9 @@ class Person(BaseModel):
     shirt_size = TextField()
     dietary_needs = TextField(null = True)
 
+    class Meta:
+        order_by = [ 'name' ]
+
     def auth(self):
         return crypto.hmac(str(self.id))
 
@@ -192,6 +195,9 @@ class Product(BaseModel):
     cost = IntegerField()
     note = TextField(null = True)
 
+    class Meta:
+        order_by = [ 'description' ]
+
     def price(self):
         return Money(self.cost)
 
@@ -215,6 +221,9 @@ class Purchase(BaseModel):
     quantity = IntegerField()
     date = DateField()
 
+    class Meta:
+        order_by = [ 'date' ]
+
     def total(self):
         return Money(self.item.cost * self.quantity)
 
@@ -229,6 +238,9 @@ class Payment(BaseModel):
     cost = IntegerField()
     note = TextField(null = True)
 
+    class Meta:
+        order_by = [ 'date' ]
+
     def amount(self): return Money(self.cost)
     def __str__(self): return str(self.amount())
 
@@ -237,6 +249,9 @@ class Todo(BaseModel):
     """
     Something that one of the organizers is supposed to do.
     """
+
+    class Meta:
+        order_by = [ 'deadline' ]
 
     description = TextField()
     deadline = DateTimeField()
