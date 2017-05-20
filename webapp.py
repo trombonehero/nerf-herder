@@ -190,8 +190,89 @@ def register():
 @frontend.route('/org/')
 @auth.login_required
 def admin():
-    return 'admin'
+    return flask.render_template('admin/summary.html',
+        config = config,
+        attendees = db.Person.select(),
+        show_admin_links = True,
+        prereg = flask.current_app.config['PREREGISTRATION_CODE'],
+    )
 
+@frontend.route('/org/attendees/')
+@auth.login_required
+def admin_attendees():
+    return flask.render_template('admin/summary.html',
+        config = config,
+        attendees = db.Person.select(),
+        show_admin_links = True,
+    )
+
+@frontend.route('/org/poi/')
+@auth.login_required
+def admin_poi():
+    return flask.render_template('admin/summary.html',
+        config = config,
+        attendees = db.Person.select(),
+        show_admin_links = True,
+    )
+
+@frontend.route('/org/products/')
+@auth.login_required
+def admin_products():
+    return flask.render_template('admin/summary.html',
+        config = config,
+        attendees = db.Person.select(),
+        show_admin_links = True,
+    )
+
+@frontend.route('/org/purchases/')
+@auth.login_required
+def admin_purchases():
+    return flask.render_template('admin/summary.html',
+        config = config,
+        attendees = db.Person.select(),
+        show_admin_links = True,
+    )
+
+@frontend.route('/org/payments/')
+@auth.login_required
+def admin_payments():
+    return flask.render_template('admin/summary.html',
+        config = config,
+        attendees = db.Person.select(),
+        show_admin_links = True,
+    )
+
+@frontend.route('/org/todo/')
+@auth.login_required
+def admin_todo():
+    return flask.render_template('admin/summary.html',
+        config = config,
+        attendees = db.Person.select(),
+        show_admin_links = True,
+    )
+
+
+nav.nav.register_element('admin',
+    nav.Navbar(
+        nav.View(config.SITE_TITLE, '.index'),
+        nav.Subgroup(
+            'Admin',
+            nav.View('Summary', '.admin'),
+            nav.Separator(),
+            nav.View('Attendees', '.admin_attendees'),
+            nav.View('POI', '.admin_poi'),
+            nav.View('Products', '.admin_products'),
+            nav.View('Purchases', '.admin_purchases'),
+            nav.View('Payments', '.admin_payments'),
+            nav.View('Todos', '.admin_todo'),
+        ),
+        nav.Subgroup(
+            'External',
+            nav.Link('Floor plans', 'https://www.cl.cam.ac.uk/maps'),
+            nav.Link('Wiki', 'https://wiki.freebsd.org/DevSummit/201708'),
+        ),
+    )
+)
 
 nav.nav.register_element('frontend_top',
     nav.Navbar(
