@@ -47,6 +47,9 @@ class Money(object):
         assert type(micro) == int
         self.micro = micro
 
+    def value(self):
+        return self.micro / 100.0
+
     def __add__(self, other):
         if other == 0: return self
         return Money(self.micro + other.micro)
