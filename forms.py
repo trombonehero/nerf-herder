@@ -28,7 +28,7 @@ from wtforms.validators import Email, Optional, Required
 
 shirt_choices = [ (i,i) for i in ('', 'S', 'M', 'L', 'XL', '2XL', '3XL') ]
 
-class RegistrationForm(FlaskForm):
+class AttendeeForm(FlaskForm):
     name = TextField()
     username = TextField('FreeBSD username')
     host = SelectField(coerce = int)
@@ -43,7 +43,7 @@ class RegistrationForm(FlaskForm):
 
     @classmethod
     def with_hosts(cls, hosts):
-        form = RegistrationForm()
+        form = AttendeeForm()
         form.host.choices = [ (-1, '') ] + [ (p.id, p.name) for p in hosts ]
         return form
 
