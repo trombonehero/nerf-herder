@@ -59,3 +59,7 @@ table.calendar th .date {
   top: 1em;
   right: 1em;
 }
+
+td.money, th.money {
+	text-align: right;
+}
