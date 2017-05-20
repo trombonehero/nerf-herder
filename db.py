@@ -156,6 +156,21 @@ class Person(BaseModel):
     class Meta:
         order_by = [ 'name' ]
 
+    @classmethod
+    def balances(cls):
+        """ How much each attendee has paid and still owes us. """
+        attendees = cls.select()
+
+        balances = {}
+        for a in attendees:
+            paid = sum([ p.amount() for p in a.payments ])
+            owing = sum([ p.total() for p in a.purchases ]) - paid
+
+            balances[a] = owing
+
+        return balances
+
+
     def auth(self):
         return crypto.hmac(str(self.id))
 
