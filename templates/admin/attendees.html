@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% import 'form.html' as forms %}
+
+{% macro row(form, person = None) %}
+  {{ form.hidden_tag() }}
+
+  <td>
+    {% if person != None %}
+      <a href="/attendee/{{ person.id }}?auth={{ person.auth() }}"
+        target="_blank">
+        {{ person.id }}
+      </a>
+    {% endif %}
+  </td>
+  <td>{{ form.name }}<br/>{{ form.host }}</td>
+  <td>{{ form.username }}<br/>{{ form.email }}</td>
+  <td>{{ form.address }}</td>
+  <td>{{ form.arrival }}<br/>{{ form.departure }}</td>
+  <td>{{ form.shirt_size }}</td>
+  <td>{{ form.dietary_needs }}</td>
+{% endmacro %}
+
+{% block content %}
+  <div class="container">
+    <div class="panel">
+      <div class="panel-heading">
+        This data is also available <a href="attendees.csv">in CSV format</a>
+        or <a href="email">plain text (contacts only)</a>.
+      </div>
+      <div class="panel-body">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <td>ID</td>
+              <td>Name / Host</td>
+              <td>Username / E-mail</td>
+              <td>Address</td>
+              <td>Arrival/Departure</td>
+              <td>Size</td>
+              <td>Dietary requirements</td>
+            </tr>
+          </thead>
+          <tbody>
+            {% for (person, form) in attendees %}
+              <form action="person/update" method="post">
+                <tr>
+                  {{ row(form, person) }}
+                  <td><input type="submit" value="Modify"/></td>
+                </tr>
+              </form>
+            {% endfor %}
+
+            <form action="/new-registration" method="post">
+              <tr>
+                {{ row(new_person) }}
+                <td><input type="submit" value="Add"/></td>
+              </tr>
+            </form>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+{% endblock %}

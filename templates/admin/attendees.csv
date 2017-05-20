@@ -1,0 +1,4 @@
+"Name", Username, E-mail, Arrival, Departure, Shirt size, Host, Dietary requirements
+{% for p in attendees -%}
+"{{ p.name}}", {{ p.username }}, {{ p.email }}, {{ p.arrival if p.arrival }}, {{ p.departure if p.departure }}, {{ p.shirt_size }}, {{ p.host if p.host }}, {{ p.diet if p.diet }}
+{% endfor %}

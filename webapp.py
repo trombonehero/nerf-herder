@@ -215,10 +215,34 @@ def admin():
 @frontend.route('/org/attendees/')
 @auth.login_required
 def admin_attendees():
-    return flask.render_template('admin/index.html',
+    hosts = db.Person.select()
+
+    return flask.render_template('admin/attendees.html',
         config = config,
-        attendees = db.Person.select(),
+        attendees = [
+            (p, forms.AttendeeUpdate.for_person(p, hosts))
+            for p in db.Person.select()
+        ],
+        new_person = forms.AttendeeForm.with_hosts(hosts),
         show_admin_links = True,
+    )
+
+@frontend.route('/org/attendees/attendees.csv')
+@auth.login_required
+def admin_attendees_csv():
+    return flask.Response(
+            flask.render_template('admin/attendees.csv',
+                attendees = db.Person.select()),
+            mimetype = 'text/csv',
+    )
+
+@frontend.route('/org/attendees/email')
+@auth.login_required
+def admin_attendees_email():
+    return flask.Response(
+            flask.render_template('admin/attendee-emails.txt',
+                attendees = db.Person.select()),
+            mimetype = 'text/plain',
     )
 
 @frontend.route('/org/poi/')

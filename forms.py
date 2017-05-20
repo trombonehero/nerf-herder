@@ -62,3 +62,19 @@ class AttendeeForm(FlaskForm):
             return False
 
         return True
+
+
+class AttendeeUpdate(AttendeeForm):
+    """
+    AttendeeUpdate differs from AttendeeForm only in having an existing
+    Person.id to contend with.
+    """
+
+    id = IntegerField(widget = HiddenInput())
+
+    @classmethod
+    def for_person(cls, person, hosts):
+        form = AttendeeUpdate(None, obj = person)
+        form.host.choices = [ (-1, '') ] + [ (p.id, p.name) for p in hosts ]
+        form.host.data = person.host_id if person.host_id else -1
+        return form

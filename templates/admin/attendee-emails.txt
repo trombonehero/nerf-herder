@@ -1,0 +1,3 @@
+{% for p in attendees -%}
+"{{ p.name }}" <{{ p.email }}>
+{% endfor %}
