@@ -116,10 +116,7 @@ def register():
         if auth != flask.current_app.config['PREREGISTRATION_CODE']:
             return flask.render_template('registration-not-open.html')
 
-    form = forms.RegistrationForm()
-    form.host.choices = [ (-1, '') ] + [
-            (p.id, p.name) for p in db.Person.select()
-    ]
+    form = forms.RegistrationForm.with_hosts(db.Person.select())
 
     if flask.request.method == 'POST':
         if form.validate_on_submit():
