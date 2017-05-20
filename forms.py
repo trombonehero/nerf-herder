@@ -30,7 +30,7 @@ shirt_choices = [ (i,i) for i in ('', 'S', 'M', 'L', 'XL', '2XL', '3XL') ]
 
 class RegistrationForm(FlaskForm):
     name = TextField()
-    username = TextField('FreeBSD username (if you have one)')
+    username = TextField('FreeBSD username')
     host = SelectField(coerce = int)
     email = TextField('Email address')
     address = TextField(widget = TextArea(), validators = [ Required() ])

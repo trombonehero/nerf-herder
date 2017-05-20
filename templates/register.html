@@ -19,18 +19,46 @@
 
             {{ forms.field(form.name) }}
 
-            {{
-              forms.field(form.username,
-                help_text = "FreeBSD developers should provide their @FreeBSD.org username")
-            }}
+            <div class="panel">
+              <div class="panel-heading">
+                <!-- Nav tabs -->
+                <ul class="nav nav-pills" role="tablist">
+                  <li class="active">
+                    <a href="#dev" role="tab" data-toggle="tab">
+                      I have a FreeBSD username
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#guest" role="tab" data-toggle="tab">
+                      I am a guest of a FreeBSD developer
+                    </a>
+                  </li>
+                </ul>
+              </div>
 
-            {{ forms.field(form.host,
-                help_text = "Each guest must have a FreeBSD host") }}
+              <div class="panel-body">
+                <!-- Tab panes -->
+                <div class="tab-content">
+                  <div class="tab-pane active" id="dev">
+                    {{
+                      forms.field(form.username,
+                          help_text = "FreeBSD developers should provide their @FreeBSD.org username")
+                    }}
+                  </div>
+                  <div class="tab-pane" id="guest">
+                    {{
+                      forms.field(form.host,
+                        help_text = "Each guest must have a FreeBSD host")
+                    }}
 
-            {{
-              forms.field(form.email,
-                help_text = "Optional for for attendees with a FreeBSD username (we'll use username@FreeBSD.org if this field is blank)")
-            }}
+                    {{
+                      forms.field(form.email,
+                        help_text = "Optional for for attendees with a FreeBSD username (we'll use username@FreeBSD.org if this field is blank)")
+                    }}
+                  </div>
+                </div>
+              </div>
+            </div>
 
             {{
               forms.field(form.address, rows = '4',

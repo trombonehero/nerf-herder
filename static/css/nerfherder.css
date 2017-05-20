@@ -3,6 +3,13 @@
   background-color: black;
 }
 
+.nav-pills > li.active > a,
+.nav-pills > li.active >a:focus,
+.nav-pills > li.active >a:hover
+{
+  background-color: #ac2b28;
+}
+
 .address
 {
   white-space: pre-wrap;
