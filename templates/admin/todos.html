@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block content %}
+  {{ super() }}
+
+  <div class="container">
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Done</th>
+          <th>Description</th>
+          <th>Deadline</th>
+          <th>Assigned to</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for t in todos %}
+          <form action="update" method="post">
+            {{ t.hidden_tag() }}
+            <tr>
+              <td>{{ t.complete }}</td>
+              <td>{{ t.description }}</td>
+              <td>{{ t.deadline(class_ = 'datepicker') }}</td>
+              <td>{{ t.assignee }}</td>
+              <td><input type="submit" value="Change"/></td>
+            </tr>
+          </form>
+        {% endfor %}
+
+        <form method="post">
+          <tr>
+            {{ new.hidden_tag() }}
+            <td>{{ new.complete }}</td>
+            <td>{{ new.description }}</td>
+            <td>{{ new.deadline(class_ = 'datepicker') }}</td>
+            <td>{{ new.assignee }}</td>
+            <td><input type="submit" value="Add"/></td>
+          </tr>
+        </form>
+      </tbody>
+    </table>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+
+  <script type="text/javascript">
+  $('.datepicker').bootstrapMaterialDatePicker({
+    weekStart : 0,
+    clearButton: true,
+    minDate: '2017-06-01',
+    time: false
+  });
+  </script>
+{% endblock %}
