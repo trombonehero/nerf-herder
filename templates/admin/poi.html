@@ -1,0 +1,86 @@
+{% extends "admin/base.html" %}
+{% import 'form.html' as forms %}
+
+
+{% macro row(form, poi = None) %}
+  {{ form.hidden_tag() }}
+  <td>{{ poi.id if poi else '' }}</td>
+  <td>{{ form.title(size = 12) }}</td>
+  <td>{{ form.description(size = 24) }}</td>
+  <td>{{ form.latitude(size = 9) }}</td>
+  <td>{{ form.longitude(size = 9) }}</td>
+  <td>{{ form.icon }}</td>
+  <td>{{ form.width(size = 3) }}</td>
+  <td>{{ form.height(size = 3) }}</td>
+{% endmacro %}
+
+
+{% block content %}
+  {{ super() }}
+
+  <script src="/static/OpenLayers.js"></script>
+  <script type="text/javascript">
+function iTouchMap() {
+    window.open(
+        'http://itouchmap.com/latlong.html', 'NewWindow',
+        width=500, height=600);
+}
+  </script>
+
+  <div class="container">
+    <div class="well">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th><a href="#" onclick="return iTouchMap()">Lat</a></th>
+            <th><a href="#" onclick="return iTouchMap()">Lon</a></th>
+            <th>Icon</th>
+            <th>W</th>
+            <th>H</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for (p, form) in poi %}
+            <form action="update" method="post">
+              <tr>
+                {{ row(form, p) }}
+                <td><input type="submit" value="Change"/></td>
+              </tr>
+            </form>
+          {% endfor %}
+
+          <form method="post">
+            <tr>
+              {{ row(new_poi) }}
+              <td><input type="submit" value="Add"/></td>
+            </tr>
+          </form>
+        </tbody>
+      </table>
+
+      <div id="map"></div>
+    </div>
+  </div>
+
+<script defer="defer" type="text/javascript">
+var WGS1984 = new OpenLayers.Projection("EPSG:4326");
+var SphericalMercator = new OpenLayers.Projection("EPSG:900913");
+
+var extent = new OpenLayers.Bounds({{ ', '.join(bounds) }})
+    .transform(WGS1984, SphericalMercator);
+
+var options = {
+    restrictedExtent : extent,
+    controls: []
+};
+
+var map = new OpenLayers.Map('map', options);
+map.addLayer(new OpenLayers.Layer.OSM());
+map.zoomToExtent(extent);
+map.addLayer(new OpenLayers.Layer.Text( "text", {location: "/map/markers"} ));
+</script>
+{% endblock %}

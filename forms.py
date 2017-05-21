@@ -78,3 +78,16 @@ class AttendeeUpdate(AttendeeForm):
         form.host.choices = [ (-1, '') ] + [ (p.id, p.name) for p in hosts ]
         form.host.data = person.host_id if person.host_id else -1
         return form
+
+
+class POIForm(FlaskForm):
+    title = TextField()
+    latitude = FloatField()
+    longitude = FloatField()
+    description = TextField()
+    icon = TextField()
+    width = IntegerField(validators = [ Optional() ])
+    height = IntegerField(validators = [ Optional() ])
+
+class POIUpdateForm(POIForm):
+    id = IntegerField(widget = HiddenInput())

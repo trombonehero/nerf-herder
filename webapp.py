@@ -245,14 +245,82 @@ def admin_attendees_email():
             mimetype = 'text/plain',
     )
 
-@frontend.route('/org/poi/')
+@frontend.route('/org/poi/', methods = [ 'GET', 'POST' ])
 @auth.login_required
 def admin_poi():
-    return flask.render_template('admin/index.html',
-        config = config,
-        attendees = db.Person.select(),
-        show_admin_links = True,
+    new_poi = forms.POIForm()
+
+    if flask.request.method == 'POST':
+        if not new_poi.validate_on_submit():
+            for field, errors in new_poi.errors.items():
+                for error in errors:
+                    flask.flash(u"Problem with '%s': %s" % (
+                        getattr(new_poi, field).label.text, error),
+                        'error')
+
+        else:
+            try:
+                p = db.POI.create(
+                    title = new_poi.title.data,
+                    description = new_poi.description.data,
+                    latitude = new_poi.latitude.data,
+                    longitude = new_poi.longitude.data,
+                    icon = new_poi.icon.data,
+                )
+
+                if new_poi.height:
+                    p.height = new_poi.height.data
+
+                if new_poi.width:
+                    p.width = new_poi.width.data
+
+            except db.peewee.IntegrityError, e:
+                flask.flash(u"Error: %s" % e, 'error')
+
+            new_poi = forms.POIForm(None)
+
+    return flask.render_template('admin/poi.html',
+        poi = [
+            (p, forms.POIUpdateForm(None, obj = p))
+            for p in db.POI.select()
+        ],
+        new_poi = new_poi,
     )
+
+@frontend.route('/org/poi/update', methods = [ 'POST' ])
+@auth.login_required
+def admin_poi_update():
+    form = forms.POIUpdateForm()
+
+    if not form.validate_on_submit():
+        for field, errors in form.errors.items():
+            for error in errors:
+                flask.flash(u"Problem updating '%s': %s" % (
+                    getattr(form, field).label.text, error),
+                    'error')
+
+    else:
+        try:
+            p = db.POI.get(id = form.id.data)
+            p.title = form.title.data
+            p.description = form.description.data
+            p.latitude = form.latitude.data
+            p.longitude = form.longitude.data
+            p.icon = form.icon.data
+
+            if form.height:
+                p.height = form.height.data
+
+            if form.width:
+                p.width = form.width.data
+
+            p.save()
+
+        except Exception, e:
+            flask.flash(u"Error: %s" % e, 'error')
+
+    return flask.redirect(flask.url_for('nerf-herder frontend.admin_poi'))
+
 
 @frontend.route('/org/products/')
 @auth.login_required
