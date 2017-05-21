@@ -39,7 +39,8 @@ class AttendeeForm(FlaskForm):
                         validators = [ Optional() ])
     departure = DateField('Departure date (or empty if local)',
                           validators = [ Optional() ])
-    shirt_size = SelectField(choices = shirt_choices)
+    shirt_size = SelectField(choices = shirt_choices,
+                             validators = [ Required() ])
     dietary_needs = TextField()
 
     def add_hosts(self, hosts):
