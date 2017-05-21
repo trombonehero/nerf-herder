@@ -29,7 +29,7 @@ from wtforms.validators import Email, Optional, Required
 shirt_choices = [ (i,i) for i in ('', 'S', 'M', 'L', 'XL', '2XL', '3XL') ]
 
 class AttendeeForm(FlaskForm):
-    name = TextField()
+    name = TextField(validators = [ Required() ])
     username = TextField('FreeBSD username')
     host = SelectField(coerce = int)
     email = TextField('Email address')
@@ -89,4 +89,44 @@ class POIForm(FlaskForm):
     height = IntegerField(validators = [ Optional() ])
 
 class POIUpdateForm(POIForm):
+    id = IntegerField(widget = HiddenInput())
+
+
+class ProductForm(FlaskForm):
+    name = TextField()
+    description = TextField()
+    cost = IntegerField()
+    note = TextField()
+
+class ProductUpdateForm(ProductForm):
+    id = IntegerField(widget = HiddenInput())
+
+
+class PurchaseForm(FlaskForm):
+    buyer = SelectField()
+    item = SelectField()
+    quantity = IntegerField()
+    date = DateField()
+
+class PurchaseUpdateForm(PurchaseForm):
+    id = IntegerField(widget = HiddenInput())
+
+
+class PaymentForm(FlaskForm):
+    payer = SelectField()
+    date = DateField()
+    cost = IntegerField()
+    note = TextField(null = True)
+
+class PaymentUpdateForm(PaymentForm):
+    id = IntegerField(widget = HiddenInput())
+
+
+class TodoForm(FlaskForm):
+    description = TextField()
+    deadline = DateTimeField()
+    assignee = SelectField()
+    complete = BooleanField()
+
+class TodoUpdateForm(TodoForm):
     id = IntegerField(widget = HiddenInput())
