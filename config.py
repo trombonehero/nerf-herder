@@ -42,6 +42,10 @@ if DATABASE_URL is None:
     sys.stderr.write('  - export DATABASE_URL="..."\n')
     sys.exit(1)
 
+MAPBOX_TOKEN = os.environ.get("MAPBOX_TOKEN")
+if MAPBOX_TOKEN is None:
+    warnings.warn("MAPBOX_TOKEN not set; maps will not be able to load tiles")
+
 REGISTRATION_IS_OPEN = os.environ.get("REGISTRATION_IS_OPEN")
 
 SITE_TITLE = os.environ.get('SITE_TITLE')

@@ -278,10 +278,12 @@ def admin_poi():
             new_poi = forms.POIForm(None)
 
     return flask.render_template('admin/poi.html',
-        poi = [
-            (p, forms.POIUpdateForm(None, obj = p))
+        forms = [
+            forms.POIUpdateForm(None, obj = p)
             for p in db.POI.select()
         ],
+        poi = db.POI.select(),
+        mapbox_access_token = config.MAPBOX_TOKEN,
         new_poi = new_poi,
     )
 

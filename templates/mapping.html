@@ -1,0 +1,43 @@
+{% macro css() -%}
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css"
+   integrity="sha512-07I2e+7D8p6he1SIM+1twR5TIrhUQn9+I6yjqD53JQjFiMf8EtC93ty0/5vJTZGF8aAocvHYNEDJajGdNx1IsQ=="
+    crossorigin=""/>
+  <link href='https://api.mapbox.com/mapbox-gl-js/v0.36.0/mapbox-gl.css' rel='stylesheet' />
+{%- endmacro %}
+
+{% macro js(mapbox_access_token, map_id, poi) %}
+  <script type="text/javascript">
+function iTouchMap() {
+    window.open(
+        'http://itouchmap.com/latlong.html', 'NewWindow',
+        width=500, height=600);
+}
+  </script>
+
+  <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"
+   integrity="sha512-A7vV8IFfih/D732iSSKi20u/ooOfj/AGehOKq0f4vLT1Zr2Y+RX7C+w8A1gaSasGtRUZpF/NZgzSAu4/Gc41Lg=="
+   crossorigin=""></script>
+  <script src='https://api.mapbox.com/mapbox-gl-js/v0.36.0/mapbox-gl.js'></script>
+
+  <script type="text/javascript">
+var mymap = L.map("{{ map_id }}").setView([52.207077, 0.118554], 13);
+L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v10/tiles/256/{z}/{x}/{y}?access_token={{ mapbox_access_token }}', {
+    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+    maxZoom: 18
+}).addTo(mymap);
+
+  {% for p in poi %}
+    L.marker(
+        [ {{ p.latitude }}, {{ p.longitude }}],
+        {
+          icon: L.icon({
+            iconUrl: '{{ p.icon }}',
+            iconSize: [ {{ p.width }}, {{ p.height }} ]
+          })
+        }
+      )
+      .bindPopup("{{ p.description }}")
+      .addTo(mymap);
+  {% endfor %}
+  </script>
+{% endmacro %}
