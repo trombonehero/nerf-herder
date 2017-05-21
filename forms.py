@@ -33,6 +33,7 @@ class AttendeeForm(FlaskForm):
     username = TextField('FreeBSD username')
     host = SelectField(coerce = int)
     email = TextField('Email address')
+    administrator = BooleanField()
     address = TextField(widget = TextArea(), validators = [ Required() ])
     arrival = DateField('Arrival date (or empty if local)',
                         validators = [ Optional() ])

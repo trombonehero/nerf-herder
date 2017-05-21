@@ -12,7 +12,11 @@
       </a>
     {% endif %}
   </td>
-  <td>{{ form.name }}<br/>{{ form.host }}</td>
+  <td>
+    {{ form.name }}<br/>
+    {{ form.host }}<br/>
+    Administrator: {{ form.administrator }}
+  </td>
   <td>{{ form.username }}<br/>{{ form.email }}</td>
   <td>{{ form.address(rows = "4", cols="40") }}</td>
   <td>{{ form.arrival }}<br/>{{ form.departure }}</td>
