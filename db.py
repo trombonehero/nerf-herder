@@ -103,6 +103,9 @@ class POI(BaseModel):
     width = IntegerField(default = 32)
     height = IntegerField(default = 32)
 
+    class Meta:
+        order_by = [ 'title' ]
+
     @classmethod
     def bounds(cls):
         """
