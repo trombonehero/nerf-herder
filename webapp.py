@@ -205,7 +205,6 @@ def admin():
         bookings = bookings,
         payments = payments,
         products = products,
-        show_admin_links = True,
         todos = db.Todo.select().where(db.Todo.complete == False),
         total_payments = sum([ p.amount() for p in payments ]),
         total_purchases = total_purchases,
@@ -224,7 +223,6 @@ def admin_attendees():
             for p in db.Person.select()
         ],
         new_person = forms.AttendeeForm.with_hosts(hosts),
-        show_admin_links = True,
     )
 
 @frontend.route('/org/attendees/attendees.csv')
@@ -328,7 +326,6 @@ def admin_products():
     return flask.render_template('admin/index.html',
         config = config,
         attendees = db.Person.select(),
-        show_admin_links = True,
     )
 
 @frontend.route('/org/purchases/')
@@ -337,7 +334,6 @@ def admin_purchases():
     return flask.render_template('admin/index.html',
         config = config,
         attendees = db.Person.select(),
-        show_admin_links = True,
     )
 
 @frontend.route('/org/payments/')
@@ -346,7 +342,6 @@ def admin_payments():
     return flask.render_template('admin/index.html',
         config = config,
         attendees = db.Person.select(),
-        show_admin_links = True,
     )
 
 @frontend.route('/org/todo/')
@@ -355,7 +350,6 @@ def admin_todo():
     return flask.render_template('admin/index.html',
         config = config,
         attendees = db.Person.select(),
-        show_admin_links = True,
     )
 
 
