@@ -252,6 +252,35 @@ def admin_attendees_email():
             mimetype = 'text/plain',
     )
 
+@frontend.route('/org/attendees/update', methods = [ 'POST' ])
+@auth.login_required
+def admin_attendee_update():
+    form = forms.AttendeeUpdate()
+    form.add_hosts(db.Person.select())
+
+    if form.validate_on_submit():
+        p = db.Person.get(id = form.id.data)
+        p.name = form.name.data
+        p.username = form.username.data
+        p.host = form.host.data if form.host.data >= 0 else None
+        p.email = form.email.data
+        p.administrator = form.administrator.data
+        p.address = form.address.data
+        p.arrival = form.arrival.data
+        p.departure = form.departure.data
+        p.shirt_size = form.shirt_size.data
+        p.dietary_needs = form.dietary_needs.data
+        p.save()
+
+    else:
+        for field, errors in new_poi.errors.items():
+            for error in errors:
+                flask.flash(u"Problem with '%s': %s" % (
+                    getattr(new_poi, field).label.text, error),
+                    'error')
+
+    return flask.redirect(flask.url_for('nerf-herder frontend.admin_attendees'))
+
 @frontend.route('/org/poi/', methods = [ 'GET', 'POST' ])
 @auth.login_required
 def admin_poi():

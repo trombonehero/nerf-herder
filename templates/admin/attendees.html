@@ -46,7 +46,7 @@
           </thead>
           <tbody>
             {% for (person, form) in attendees %}
-              <form action="person/update" method="post">
+              <form action="update" method="post">
                 <tr>
                   {{ row(form, person) }}
                   <td><input type="submit" value="Modify"/></td>
