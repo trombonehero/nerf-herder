@@ -384,13 +384,59 @@ def admin_payments():
         attendees = db.Person.select(),
     )
 
-@frontend.route('/org/todo/')
+@frontend.route('/org/todo/', methods = [ 'GET', 'POST' ])
 @auth.login_required
 def admin_todo():
-    return flask.render_template('admin/index.html',
-        config = config,
-        attendees = db.Person.select(),
+    people = list(db.Person.select())
+    new = forms.TodoForm().add_people(people)
+
+    if flask.request.method == 'POST':
+        if new.validate_on_submit():
+            t = db.Todo.create(description = new.description.data)
+            if new.deadline: t.deadline = new.deadline.data
+            if new.assignee != -1: t.assignee = new.assignee.data
+            if new.complete: t.complete = new.complete.data
+            t.save()
+
+        else:
+            for field, errors in new.errors.items():
+                for error in errors:
+                    flask.flash(u"Problem with '%s': %s" % (
+                        getattr(new, field).label.text, error),
+                        'error')
+
+    new = forms.TodoForm(None).add_people(people)
+
+    return flask.render_template('admin/todos.html',
+        todos = [
+            forms.TodoUpdateForm(None, obj = t).add_people(people)
+            for t in db.Todo.select()
+        ],
+        new = new,
     )
+@frontend.route('/org/todo/update', methods = [ 'POST' ])
+@auth.login_required
+def admin_todo_update():
+    form = forms.TodoUpdateForm()
+    form.add_people(db.Person.select())
+
+    if form.validate_on_submit():
+        t = db.Todo.get(id = form.id.data)
+        t.description = form.description.data
+        t.deadline = form.deadline.data
+        if form.assignee.data != -1:
+            t.assignee = form.assignee.data
+        t.complete = form.complete.data
+        t.save()
+
+    else:
+        for field, errors in form.errors.items():
+            for error in errors:
+                flask.flash(u"Problem with '%s': %s" % (
+                    getattr(form, field).label.text, error),
+                    'error')
+
+    return flask.redirect(flask.url_for('nerf-herder frontend.admin_todo'))
 
 
 nav.nav.register_element('admin',

@@ -123,10 +123,15 @@ class PaymentUpdateForm(PaymentForm):
 
 
 class TodoForm(FlaskForm):
-    description = TextField()
-    deadline = DateTimeField()
-    assignee = SelectField()
-    complete = BooleanField()
+    description = TextField(validators = [ Required() ])
+    deadline = DateField(validators = [ Optional() ])
+    assignee = SelectField(coerce = int)
+    complete = BooleanField(validators = [ Optional() ])
+
+    def add_people(self, people):
+        self.assignee.choices = [ (-1, '') ] + [
+                (p.id, p.name) for p in people ]
+        return self
 
 class TodoUpdateForm(TodoForm):
     id = IntegerField(widget = HiddenInput())

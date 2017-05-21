@@ -272,9 +272,9 @@ class Todo(BaseModel):
         order_by = [ 'deadline' ]
 
     description = TextField()
-    deadline = DateTimeField()
-    assignee = ForeignKeyField(Person, related_name = 'todos')
-    complete = BooleanField()
+    deadline = DateTimeField(null = True)
+    assignee = ForeignKeyField(Person, null = True, related_name = 'todos')
+    complete = BooleanField(default = False)
 
 
 ALL_TABLES = (
