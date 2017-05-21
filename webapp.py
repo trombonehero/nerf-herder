@@ -109,6 +109,14 @@ def attendee(id):
             "example: /attendee/42?auth=jp2v55degrkqtlj4o3qk")
 
 
+@frontend.route('/map/')
+def map():
+    return flask.render_template('map.html',
+        poi = db.POI.select(),
+        mapbox_access_token = config.MAPBOX_TOKEN,
+    )
+
+
 @frontend.route('/register/', methods = [ 'GET', 'POST' ])
 def register():
     if not config.REGISTRATION_IS_OPEN:
@@ -369,6 +377,7 @@ nav.nav.register_element('admin',
             nav.View('Payments', '.admin_payments'),
             nav.View('Todos', '.admin_todo'),
         ),
+        nav.View('Map', '.map'),
         nav.Subgroup(
             'External',
             nav.Link('Floor plans', 'https://www.cl.cam.ac.uk/maps'),
@@ -380,6 +389,7 @@ nav.nav.register_element('admin',
 nav.nav.register_element('frontend_top',
     nav.Navbar(
         nav.View(config.SITE_TITLE, '.index'),
+        nav.View('Map', '.map'),
         nav.View('Register', '.register'),
         nav.Subgroup(
             'External',

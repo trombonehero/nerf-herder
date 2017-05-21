@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% import "mapping.html" as mapping %}
+
+{% block styles -%}
+  {{ super() }}
+  {{ mapping.css() }}
+{%- endblock %}
+
+{% block scripts -%}
+  {{ super() }}
+  {{ mapping.js(mapbox_access_token, 'map', poi) }}
+{%- endblock %}
+
+
+{% block content %}
+  <div class="container">
+    <div class="panel">
+      <div class="panel-heading">
+        Cycling is the preferred method of transportation in Cambridge.
+      </div>
+      <div class="panel-body">
+        <div id="map" style="height: 400px"></div>
+      </div>
+    </div>
+
+    <div class="well">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Name</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          {%- for p in poi %}
+            <a name="{{ p.title }}"></a>
+            <tr>
+              <td class="text-center"><img src="{{ p.icon }}" width="{{ p.width }}" height="{{ p.height }}"/></td>
+              <td>
+                <a href="http://www.openstreetmap.org/index.html?mlat={{ p.latitude }}&mlon={{ p.longitude }}&minlat=52.192&maxlat=52.22&minlon=0.09&maxlon=0.14&box=yes&layers=C" target="_blank">
+                  {{ p.title }}
+                </a>
+              </td>
+              <td>
+                {{ p.description }}
+              </td>
+            </tr>
+          {% endfor -%}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock %}
