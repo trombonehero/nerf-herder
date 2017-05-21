@@ -124,7 +124,8 @@ def register():
         if auth != flask.current_app.config['PREREGISTRATION_CODE']:
             return flask.render_template('registration-not-open.html')
 
-    form = forms.AttendeeForm.with_hosts(db.Person.select())
+    form = forms.AttendeeForm()
+    form.add_hosts(db.Person.select())
 
     if flask.request.method == 'POST':
         if form.validate_on_submit():
@@ -230,7 +231,7 @@ def admin_attendees():
             (p, forms.AttendeeUpdate.for_person(p, hosts))
             for p in db.Person.select()
         ],
-        new_person = forms.AttendeeForm.with_hosts(hosts),
+        new_person = forms.AttendeeForm(obj = None).add_hosts(hosts),
     )
 
 @frontend.route('/org/attendees/attendees.csv')

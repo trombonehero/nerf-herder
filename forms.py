@@ -41,11 +41,9 @@ class AttendeeForm(FlaskForm):
     shirt_size = SelectField(choices = shirt_choices)
     dietary_needs = TextField()
 
-    @classmethod
-    def with_hosts(cls, hosts):
-        form = AttendeeForm()
-        form.host.choices = [ (-1, '') ] + [ (p.id, p.name) for p in hosts ]
-        return form
+    def add_hosts(self, hosts):
+        self.host.choices = [ (-1, '') ] + [ (p.id, p.name) for p in hosts ]
+        return self
 
     def validate(self):
         if not FlaskForm.validate(self):
