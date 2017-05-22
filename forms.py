@@ -123,6 +123,10 @@ class PaymentForm(FlaskForm):
         self.payer.choices = [ (p.id, p.name) for p in people ]
         return self
 
+    def set_payer(self, p):
+        self.payer.data = p.id if p else -1
+        return self
+
 class PaymentUpdateForm(PaymentForm):
     id = IntegerField(widget = HiddenInput())
 
@@ -136,6 +140,10 @@ class TodoForm(FlaskForm):
     def add_people(self, people):
         self.assignee.choices = [ (-1, '') ] + [
                 (p.id, p.name) for p in people ]
+        return self
+
+    def set_assignee(self, a):
+        self.assignee.data = a.id if a else -1
         return self
 
 class TodoUpdateForm(TodoForm):

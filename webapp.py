@@ -452,7 +452,11 @@ def admin_payments():
 
     return flask.render_template('admin/payments.html',
         payments = [
-            forms.PaymentUpdateForm(None, obj = p).add_people(people)
+            (
+                forms.PaymentUpdateForm(None, obj = p)
+                     .add_people(people)
+                     .set_payer(p.payer)
+            )
             for p in db.Payment.select()
         ],
         new = new,
@@ -506,7 +510,11 @@ def admin_todo():
 
     return flask.render_template('admin/todos.html',
         todos = [
-            forms.TodoUpdateForm(None, obj = t).add_people(people)
+            (
+                forms.TodoUpdateForm(None, obj = t)
+                     .add_people(people)
+                     .set_assignee(t.assignee)
+            )
             for t in db.Todo.select()
         ],
         new = new,
