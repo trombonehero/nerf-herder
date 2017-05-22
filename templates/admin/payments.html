@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block content %}
+  {{ super() }}
+
+  <div class="container">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Date</th>
+          <th>Payer</th>
+          <th>Amount ({{ config.CURRENCY_SYMBOL | safe }} &div; 100)</th>
+          <th>Note</th>
+        </tr>
+      </thead>
+      <tfoot>
+        <tr>
+          <td colspan="2">Total</td>
+          <td class="money">{{ total | safe}}</td>
+        </tr>
+      </tfoot>
+
+      <tbody>
+        {% for p in payments %}
+          <form action="update" method="post">
+            {{ p.hidden_tag() }}
+
+            <tr>
+              <td>{{ p.id }}</td>
+              <td>{{ p.date(class_ = 'datepicker') }}</td>
+              <td>{{ p.payer }}</td>
+              <td>{{ p.value }}</td>
+              <td>{{ p.note }}</td>
+              <td><input type="submit" value="Change"/></td>
+            </tr>
+          </form>
+        {% endfor %}
+
+        <form method="post">
+          {{ new.hidden_tag() }}
+          <tr>
+            <td></td>
+            <td>{{ new.date(class_ = 'datepicker') }}</td>
+            <td>{{ new.payer }}</td>
+            <td>{{ new.value }}</td>
+            <td>{{ new.note }}</td>
+            <td><input type="submit" value="Add"/></td>
+          </tr>
+        </form>
+      </tbody>
+    </table>
+  </div>
+{% endblock %}
+
+
+{% block scripts %}
+  {{ super() }}
+
+  <script type="text/javascript">
+  $('.datepicker').bootstrapMaterialDatePicker({
+    weekStart : 0,
+    clearButton: true,
+    time: false
+  });
+  </script>
+{% endblock %}

@@ -376,13 +376,62 @@ def admin_purchases():
         attendees = db.Person.select(),
     )
 
-@frontend.route('/org/payments/')
+@frontend.route('/org/payments/', methods = [ 'GET', 'POST' ])
 @auth.login_required
 def admin_payments():
-    return flask.render_template('admin/index.html',
-        config = config,
-        attendees = db.Person.select(),
+    people = list(db.Person.select())
+    new = forms.PaymentForm().add_people(people)
+
+    if flask.request.method == 'POST':
+        if new.validate_on_submit():
+            p = db.Payment.create(
+                payer = new.payer.data,
+                date = new.date.data,
+                value = 100 * new.value.data
+            )
+            if new.note:
+                p.note = new.note.data
+                p.save()
+
+        else:
+            for field, errors in new.errors.items():
+                for error in errors:
+                    flask.flash(u"Problem with '%s': %s" % (
+                        getattr(new, field).label.text, error),
+                        'error')
+
+    new = forms.PaymentForm(None).add_people(people)
+
+    return flask.render_template('admin/payments.html',
+        payments = [
+            forms.PaymentUpdateForm(None, obj = p).add_people(people)
+            for p in db.Payment.select()
+        ],
+        new = new,
     )
+
+@frontend.route('/org/payments/update', methods = [ 'POST' ])
+@auth.login_required
+def admin_payments_update():
+    form = forms.PaymentUpdateForm()
+    form.add_people(db.Person.select())
+
+    if form.validate_on_submit():
+        p = db.Payment.get(id = form.id.data)
+        p.date = form.date.data
+        p.payer = form.payer.data
+        p.value = form.value.data
+        p.save()
+
+    else:
+        for field, errors in form.errors.items():
+            for error in errors:
+                flask.flash(u"Problem with '%s': %s" % (
+                    getattr(form, field).label.text, error),
+                    'error')
+
+    return flask.redirect(flask.url_for('nerf-herder frontend.admin_payments'))
+
 
 @frontend.route('/org/todo/', methods = [ 'GET', 'POST' ])
 @auth.login_required

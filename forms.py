@@ -114,10 +114,14 @@ class PurchaseUpdateForm(PurchaseForm):
 
 
 class PaymentForm(FlaskForm):
-    payer = SelectField()
-    date = DateField()
-    cost = IntegerField()
-    note = TextField(null = True)
+    payer = SelectField(coerce = int)
+    date = DateField(validators = [ Required() ])
+    value = IntegerField(validators = [ Required() ])
+    note = TextField()
+
+    def add_people(self, people):
+        self.payer.choices = [ (p.id, p.name) for p in people ]
+        return self
 
 class PaymentUpdateForm(PaymentForm):
     id = IntegerField(widget = HiddenInput())

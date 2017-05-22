@@ -253,7 +253,7 @@ class Payment(BaseModel):
 
     payer = ForeignKeyField(Person, related_name = 'payments')
     date = DateField()
-    cost = IntegerField()
+    value = IntegerField()
     note = TextField(null = True)
 
     class Meta:
