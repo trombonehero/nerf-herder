@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% import 'form.html' as form %}
+
+{% block content %}
+  <div class="container">
+    <div class="well">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Cost ({{ config.CURRENCY_SYMBOL | safe }} &div; 100)</th>
+            <th>Special notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for p in products %}
+            <form action="update" method="post">
+              <tr>
+                {{ p.hidden_tag() }}
+                <td>{{ p.name }}</td>
+                <td>{{ p.description }}</td>
+                <td>{{ p.cost }}</td>
+                <td>{{ p.note }}</td>
+                <td><input type="submit" value="Modify"/></td>
+              </tr>
+            </form>
+          {% endfor %}
+
+          <form method="post">
+            <tr>
+              {{ new.hidden_tag() }}
+              <td>{{ new.name }}</td>
+              <td>{{ new.description }}</td>
+              <td>{{ new.cost }}</td>
+              <td>{{ new.note }}</td>
+              <td><input type="submit" value="Add"/></td>
+            </tr>
+          </form>
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock %}
