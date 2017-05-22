@@ -360,13 +360,61 @@ def admin_poi_update():
     return flask.redirect(flask.url_for('nerf-herder frontend.admin_poi'))
 
 
-@frontend.route('/org/products/')
+@frontend.route('/org/products/', methods = [ 'GET', 'POST' ])
 @auth.login_required
 def admin_products():
-    return flask.render_template('admin/index.html',
-        config = config,
-        attendees = db.Person.select(),
+    new = forms.ProductForm()
+
+    if flask.request.method == 'POST':
+        if new.validate_on_submit():
+            p = db.Product.create(
+                name = new.name.data,
+                description = new.description.data,
+                cost = new.cost.data,
+            )
+
+            if new.note:
+                p.note = new.note.data
+                p.save()
+
+        else:
+            for field, errors in new.errors.items():
+                for error in errors:
+                    flask.flash(u"Problem with '%s': %s" % (
+                        getattr(new, field).label.text, error),
+                        'error')
+
+    new = forms.ProductForm(None)
+
+    return flask.render_template('admin/products.html',
+        products = [
+            forms.ProductUpdateForm(None, obj = p) for p in db.Product.select()
+        ],
+        new = new,
     )
+
+@frontend.route('/org/products/update', methods = [ 'POST' ])
+@auth.login_required
+def admin_product_update():
+    form = forms.ProductUpdateForm()
+
+    if form.validate_on_submit():
+        p = db.Product.get(id = form.id.data)
+        p.name = form.name.data
+        p.description = form.description.data
+        p.cost = form.cost.data
+        p.note = form.note.data
+        p.save()
+
+    else:
+        for field, errors in form.errors.items():
+            for error in errors:
+                flask.flash(u"Problem with '%s': %s" % (
+                    getattr(form, field).label.text, error),
+                    'error')
+
+    return flask.redirect(flask.url_for('nerf-herder frontend.admin_products'))
+
 
 @frontend.route('/org/purchases/')
 @auth.login_required
