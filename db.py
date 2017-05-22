@@ -259,7 +259,7 @@ class Payment(BaseModel):
     class Meta:
         order_by = [ 'date' ]
 
-    def amount(self): return Money(self.cost)
+    def amount(self): return Money(self.value)
     def __str__(self): return str(self.amount())
 
 
