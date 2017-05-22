@@ -117,7 +117,7 @@ def map():
     )
 
 
-@frontend.route('/register/', methods = [ 'GET', 'POST' ])
+@frontend.route('/register', methods = [ 'GET', 'POST' ])
 def register():
     if not config.REGISTRATION_IS_OPEN:
         auth = flask.request.args.get('preregistration')
