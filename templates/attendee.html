@@ -110,7 +110,7 @@
 
         <div class="col-md-6">
           <h2>Anything else?</h2>
-          <form action="buy" method="post">
+          <form action="/buy" method="get">
             <input type="hidden" name="buyer" value="{{ attendee.id }}"/>
             <input type="hidden" name="auth" value="{{ attendee.auth() }}"/>
             {{ form.chooser('item', products) }}

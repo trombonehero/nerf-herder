@@ -109,6 +109,33 @@ def attendee(id):
             "example: /attendee/42?auth=jp2v55degrkqtlj4o3qk")
 
 
+
+@frontend.route('/buy')
+def buy():
+    try:
+        item_id = int(flask.request.args.get('item'))
+        item = db.Product.get(id = item_id)
+
+        buyer_id = int(flask.request.args.get('buyer'))
+        buyer = db.Person.get(id = buyer_id)
+
+        auth_code = flask.request.args.get('auth')
+        if auth_code == buyer.auth():
+            db.Purchase.create(
+                buyer = buyer,
+                item = item,
+                quantity = 1,
+                date = datetime.datetime.now()
+            )
+
+            return flask.redirect('/attendee/%d?auth=%s' % (
+                    buyer.id, buyer.auth()
+            ))
+
+    except:
+        return render_error(404, 'No such person, item or authorization code')
+
+
 @frontend.route('/map/')
 def map():
     return flask.render_template('map.html',
