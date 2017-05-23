@@ -239,8 +239,15 @@ class Purchase(BaseModel):
     quantity = IntegerField()
     date = DateField()
 
+    # The product being purchased normally costs money, but in this case is
+    # being provided free of charge (or included with registration).
+    complimentary = BooleanField(default = False)
+
     class Meta:
         order_by = [ 'date' ]
+
+    def name(self):
+        return str(self.item) + (' (gratis)' if self.complimentary else '')
 
     def total(self):
         return Money(self.item.cost * self.quantity)
