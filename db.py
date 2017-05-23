@@ -153,7 +153,7 @@ class Person(BaseModel):
     arrival = DateField(null = True)
     departure = DateField(null = True)
     host = ForeignKeyField(DeferredPerson, null = True, related_name = 'guests')
-    shirt_size = TextField()
+    shirt_size = TextField(null = True)
     dietary_needs = TextField(null = True)
 
     class Meta:
