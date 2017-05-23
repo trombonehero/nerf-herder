@@ -304,3 +304,11 @@ def init(drop_first = True):
         description = 'Normal registration',
         cost = 0,     # admins should fix this up before opening registration
     )
+
+    for size in ('S', 'M', 'L', 'XL', '2XL', '3XL'):
+        for (shape_code, shape_name) in (('F', "Women's"), ('M', "Men's")):
+            Product.create(
+                name = 'Shirt (%s/%s)' % (shape_code, size),
+                description = '%s shirt (size %s)' % (shape_name, size),
+                cost = 0,
+            )
