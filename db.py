@@ -250,7 +250,10 @@ class Purchase(BaseModel):
         return str(self.item) + (' (gratis)' if self.complimentary else '')
 
     def total(self):
-        return Money(self.item.cost * self.quantity)
+        return (
+            Money(0) if self.complimentary
+                else Money(self.item.cost * self.quantity)
+        )
 
 
 class Payment(BaseModel):

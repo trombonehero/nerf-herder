@@ -94,8 +94,14 @@
                 <tr>
                   <td>{{ p.quantity }}</td>
                   <td>{{ p.item.description }}</td>
-                  <td class="money">{{ p.item.price() | safe }}</td>
-                  <td class="money">{{ p.buyer.total_purchases() | safe }}</td>
+                  <td class="money">
+                    {% if p.complimentary %}
+                      gratis
+                    {% else %}
+                      {{ p.item.price() | safe }}
+                    {% endif %}
+                  </td>
+                  <td class="money">{{ p.total() | safe }}</td>
                 </tr>
               {% endfor %}
             </tbody>
