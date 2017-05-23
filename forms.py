@@ -26,8 +26,6 @@ from wtforms.fields import *
 from wtforms.widgets import HiddenInput, TextArea
 from wtforms.validators import Email, Optional, Required
 
-shirt_choices = [ (i,i) for i in ('', 'S', 'M', 'L', 'XL', '2XL', '3XL') ]
-
 class AttendeeForm(FlaskForm):
     name = TextField(validators = [ Required() ])
     username = TextField('FreeBSD username')
@@ -39,8 +37,6 @@ class AttendeeForm(FlaskForm):
                         validators = [ Optional() ])
     departure = DateField('Departure date (or empty if local)',
                           validators = [ Optional() ])
-    shirt_size = SelectField(choices = shirt_choices,
-                             validators = [ Required() ])
     dietary_needs = TextField()
 
     def add_hosts(self, hosts):
@@ -62,6 +58,14 @@ class AttendeeForm(FlaskForm):
             return False
 
         return True
+
+
+class RegistrationForm(AttendeeForm):
+    shirt_style = SelectField(coerce = int, validators = [ Required() ])
+
+    def add_shirt_styles(self, styles):
+        self.shirt_style.choices = [ (s.id, s.description) for s in styles ]
+        return self
 
 
 class AttendeeUpdate(AttendeeForm):

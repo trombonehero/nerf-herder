@@ -124,7 +124,12 @@ def register():
         if auth != flask.current_app.config['PREREGISTRATION_CODE']:
             return flask.render_template('registration-not-open.html')
 
-    form = forms.AttendeeForm()
+    shirt_styles = (
+            db.Product.select()
+                      .where(db.Product.name.startswith('Shirt '))
+    )
+
+    form = forms.RegistrationForm().add_shirt_styles(shirt_styles)
     form.add_hosts(db.Person.select())
 
     if flask.request.method == 'POST':
@@ -139,6 +144,8 @@ def register():
                 host = None
 
             try:
+                shirt = db.Product.get(id = form.shirt_style.data)
+
                 # Create the person in the database:
                 p = db.Person.create(
                     name = form.name.data,
@@ -148,7 +155,6 @@ def register():
                     address = form.address.data,
                     arrival = form.arrival.data,
                     departure = form.departure.data,
-                    shirt_size = form.shirt_size.data,
                     dietary_needs = form.dietary_needs.data,
                 )
 
@@ -167,6 +173,15 @@ def register():
                     date = datetime.datetime.now()
                 )
 
+                # Get them a shirt:
+                db.Purchase.create(
+                    buyer = p,
+                    item = shirt,
+                    quantity = 1,
+                    date = datetime.datetime.now(),
+                    complimentary = True
+                )
+
                 flask.flash('Registration successful!')
 
                 mail.send([ p.email ],
@@ -178,6 +193,9 @@ def register():
                 return flask.redirect('/attendee/%d?auth=%s' % (
                         p.id, p.auth()
                 ))
+
+            except db.Product.NotFoundError, e:
+                flask.flash('Invalid shirt style')
 
             except db.peewee.IntegrityError, e:
                 flask.flash(u"Error: %s (have you already registered?)" % e,
