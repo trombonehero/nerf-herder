@@ -214,7 +214,7 @@ class Product(BaseModel):
     note = TextField(null = True)
 
     class Meta:
-        order_by = [ 'description' ]
+        order_by = [ 'name' ]
 
     def price(self):
         return Money(self.cost)
