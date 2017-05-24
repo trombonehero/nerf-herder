@@ -1,0 +1,125 @@
+{% extends "admin/base.html" %}
+{% import 'form.html' as form %}
+
+{% block content %}
+  {{ super() }}
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="panel panel-info">
+          <div class="panel-heading">View by customer</div>
+          <div class="panel-body">
+            <form action=".">
+              {{ form.chooser('person', people) }}
+              <input class="btn" type="submit"/>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="panel panel-success">
+          <div class="panel-heading">View by product</div>
+          <div class="panel-body">
+            <form action=".">
+              {{ form.chooser('product', products) }}
+              <input class="btn" type="submit"/>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="panel {{
+            "panel-info" if person else "panel-success" if product else "" }}">
+          <div class="panel-heading">
+            Purchases
+            {% if person %}
+              by:
+              <a class="btn btn-default btn-raised btn-sm"
+                  href="/attendee/{{ person.id }}?auth={{ person.auth() }}">
+                {{ person }}
+              </a>
+            {% elif product %}
+              of: {{ product | safe }}
+            {% endif %}
+          </div>
+          <div class="panel-body">
+            {% if not (person or product) %}
+              Choose a customer or a product
+            {% endif %}
+
+            <h2 class="pull-right">{{ total | safe }}</h2>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  {% if person %}
+                    <th>Item</th>
+                  {% else %}
+                    <th>Buyer</th>
+                  {% endif %}
+                  <th>Quantity</th>
+                  <th>Comp?</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for (p, form) in purchases %}
+                  <form method="post">
+                    {{ form.hidden_tag() }}
+
+                    <tr>
+                      <td>{{ p.date }}</td>
+                      <td>
+                        {% if person %}
+                          {{ form.item | safe }}
+                          <input type="hidden" name="buyer"
+                                               value="{{ person.id }}">
+                        {% else %}
+                          {{ form.buyer }}
+                          <input type="hidden" name="item"
+                                               value="{{ product.id }}">
+                        {% endif %}
+                      </td>
+                      <td>{{ form.quantity }}</td>
+                      <td>{{ form.complimentary }}</td>
+                      <td><input type="submit" value="Update"/></td>
+                    </tr>
+                  </form>
+                {% endfor %}
+              </tbody>
+              {% if new %}
+                <tfoot>
+                  <form method="post">
+                    {{ new.hidden_tag() }}
+                    <tr>
+                      <td>(now)</td>
+                      <td>
+                        {% if person %}
+                          {{ new.item }}
+                          <input type="hidden" name="buyer"
+                                               value="{{ person.id }}"/>
+                        {% else %}
+                          {{ new.buyer }}
+                          <input type="hidden" name="item"
+                                               value="{{ product.id }}"/>
+                        {% endif %}
+                      </td>
+                      <td>{{ new.quantity }}</td>
+                      <td>{{ new.complimentary }}</td>
+                      <td><input type="submit" value="Create"/></td>
+                    </tr>
+                  </form>
+                </tfoot>
+              {% endif %}
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

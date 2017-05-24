@@ -461,13 +461,112 @@ def admin_product_update():
     return flask.redirect(flask.url_for('nerf-herder frontend.admin_products'))
 
 
-@frontend.route('/org/purchases/')
+@frontend.route('/org/purchases/', methods = [ 'GET', 'POST' ])
 @auth.login_required
 def admin_purchases():
-    return flask.render_template('admin/index.html',
-        config = config,
+    (person, product) = (None, None)
+    new = None
+    purchases = list()
+    total = db.Money(0)
+
+    try:
+        people = list(db.Person.select())
+        products = list(db.Product.select())
+
+        # Handle purchase creation/update first
+        if flask.request.method == 'POST':
+            if 'id' in flask.request.form:
+                update_purchase(people, products, flask.request.form)
+            else:
+                create_purchase(people, products, flask.request.form)
+
+        # Are we looking at a purchases by a person or of a product?
+        # (or neither?)
+        args = flask.request.args
+        if 'person' in args:
+            person = db.Person.get(id = args['person'])
+
+        elif 'product' in args:
+            product = db.Product.get(id = args['product'])
+
+        new = (
+            forms.PurchaseForm(None, obj = None)
+                .set_buyers(people)
+                .set_products(products)
+        )
+
+        if person:
+            purchases = person.purchases
+            total = person.total_purchases()
+
+        elif product:
+            purchases = product.purchases
+
+        else:
+            new = None
+
+    except Exception, e:
+        flask.flash(str(e), 'error')
+
+    return flask.render_template('admin/purchases.html',
         attendees = db.Person.select(),
+        new = new,
+        now = datetime.datetime.now(),
+        people = people,
+        person = person,
+        product = product,
+        products = products,
+        purchases = [
+            (p, forms.PurchaseUpdateForm.create(people, products, p))
+            for p in purchases
+        ],
+        total = total,
     )
+
+
+def create_purchase(people, products, form_data):
+    form = forms.PurchaseForm().set_buyers(people).set_products(products)
+
+    if form.validate_on_submit():
+        buyer = db.Person.get(id = form.buyer.data)
+        product = db.Product.get(id = form.item.data)
+
+        db.Purchase.create(
+            date = datetime.datetime.now(),
+            buyer = buyer,
+            item = product,
+            quantity = form.quantity.data,
+            complimentary = form.complimentary.data,
+        )
+
+    else:
+        for field, errors in errors.items():
+            for error in form.errors:
+                flask.flash(u"Problem with '%s': %s" % (
+                    getattr(form, field).label.text, error),
+                    'error')
+
+def update_purchase(people, products, form_data):
+    form = forms.PurchaseUpdateForm.create(people, products, form_data)
+
+    if form.validate_on_submit():
+        buyer = db.Person.get(id = form.buyer.data)
+        product = db.Product.get(id = form.item.data)
+
+        purchase = db.Purchase.get(id = form.id.data)
+        purchase.buyer = buyer
+        purchase.item = product
+        purchase.quantity = form.quantity.data
+        purchase.complimentary = form.complimentary.data
+        purchase.save()
+
+    else:
+        for field, errors in form.errors.items():
+            for error in errors:
+                flask.flash(u"Problem with '%s': %s" % (
+                    getattr(form, field).label.text, error),
+                    'error')
+
 
 @frontend.route('/org/payments/', methods = [ 'GET', 'POST' ])
 @auth.login_required

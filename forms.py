@@ -108,13 +108,36 @@ class ProductUpdateForm(ProductForm):
 
 
 class PurchaseForm(FlaskForm):
-    buyer = SelectField()
-    item = SelectField()
-    quantity = IntegerField()
-    date = DateField()
+    buyer = SelectField(coerce = int)
+    item = SelectField(coerce = int)
+    quantity = IntegerField(validators = [ Required() ])
+    complimentary = BooleanField(default = False)
+
+    def set_buyers(self, buyers):
+        self.buyer.choices = [ (b.id, b.name) for b in buyers ]
+        return self
+
+    def set_products(self, products):
+        self.item.choices = [ (p.id, p.description) for p in products ]
+        return self
 
 class PurchaseUpdateForm(PurchaseForm):
-    id = IntegerField(widget = HiddenInput())
+    id = IntegerField(widget = HiddenInput(), validators = [ Required() ])
+
+    @classmethod
+    def create(cls, people, products, data):
+        if isinstance(data, dict):
+            form = PurchaseUpdateForm(data)
+
+        else:
+            form = PurchaseUpdateForm(None, obj = data)
+            form.buyer.data = data.buyer.id
+            form.item.data = data.item.id
+
+        form.set_buyers(people)
+        form.set_products(products)
+
+        return form
 
 
 class PaymentForm(FlaskForm):
