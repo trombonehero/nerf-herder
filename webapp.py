@@ -313,7 +313,6 @@ def admin_attendee_update():
         p.address = form.address.data
         p.arrival = form.arrival.data
         p.departure = form.departure.data
-        p.shirt_size = form.shirt_size.data
         p.dietary_needs = form.dietary_needs.data
         p.save()
 
