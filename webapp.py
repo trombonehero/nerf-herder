@@ -245,7 +245,7 @@ def admin():
     products = db.Product.select().where(db.Product.cost > 0)
     total_purchases = sum([ p.all_purchases() for p in products ])
 
-    payments = db.Payment.select().order_by(db.Payment.date)
+    payments = db.Payment.select().order_by(db.Payment.date.desc())
 
     balances = db.Person.balances()
     balance = sum(balances.values())
