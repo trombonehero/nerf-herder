@@ -10,33 +10,53 @@
     <div class="panel">
       <div class="panel-heading"><h4>Summary</h4></div>
       <div class="panel-body">
-        <p>
-          Registration is
-          <b>{% if not config.REGISTRATION_IS_OPEN %}not{% endif %} open</b>.
-          The preregistration code is
-          <a href="/register?preregistration={{ prereg }}" target="_blank">
-            {{ prereg }}</a>.
-        </p>
+        <div class="row">
+          <div class="col-md-8">
+            <div class="alert {%
+                if config.REGISTRATION_IS_OPEN %}alert-success{%
+                else %} alert-warning {%
+                endif %}">
+              Registration is
+              <b>{% if not config.REGISTRATION_IS_OPEN %}not{% endif %} open</b>.
+              The preregistration code is
+              <a href="/register?preregistration={{ prereg }}" target="_blank">
+                {{ prereg }}</a>.
+            </div>
+          </div>
 
-        <p>
-          {{ attendees.count() }} registered <a href="attendees">attendees</a>
-          (<a href="attendees.csv">download in CSV format</a>,
-            <a href="attendee-emails">text format</a> or
-            <a id="copier" href="#"
-              data-clipboard-text="{% for a in attendees %}{{ a.email }},{% endfor %}"
-            >
-              copy addresses to clipboard
-            </a>):
-        </p>
-
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.12/clipboard.min.js"></script>
-        <script type="text/javascript">
-        new Clipboard('#copier');
-        </script>
-
-        <p>
-          {{ total_payments }} paid in (out of {{ total_purchases | safe }}).
-        </p>
+          <div class="col-md-4">
+            <ul class="nav nav-pills">
+              <li><a href="attendees">{{ attendees.count() }} attendees</a></li>
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" data-target="#">
+                  Export <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a href="attendees/attendees.csv">CSV</a></li>
+                  <li class="divider"></li>
+                  <li class="dropdown-header">Email addresses</li>
+                  <li><a href="attendees/email">View as text</a></li>
+                  <li>
+                    <a id="copier" href="#"
+                       data-clipboard-text="{% for a in attendees %}{{ a.email }},{% endfor %}">
+                      Copy to clipboard
+                    </a>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.12/clipboard.min.js"></script>
+                    <script type="text/javascript">
+                      new Clipboard('#copier');
+                    </script>
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <a href="payments">
+                  {{ total_payments }} paid in
+                  (out of {{ total_purchases | safe }})
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
 
         <table class="table">
           <thead>
