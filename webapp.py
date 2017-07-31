@@ -325,6 +325,20 @@ def admin_attendee_update():
 
     return flask.redirect(flask.url_for('nerf-herder frontend.admin_attendees'))
 
+
+@frontend.route('/org/attendees/delete', methods = [ 'POST' ])
+@auth.login_required
+def admin_attendee_delete():
+    try:
+        form = forms.AttendeeUpdate()
+        db.Person.get(id = form.id.data).delete_instance()
+
+    except Exception, e:
+        flask.flash(str(e), 'error')
+
+    return flask.redirect(flask.url_for('nerf-herder frontend.admin_attendees'))
+
+
 @frontend.route('/org/poi/', methods = [ 'GET', 'POST' ])
 @auth.login_required
 def admin_poi():
@@ -404,6 +418,19 @@ def admin_poi_update():
     return flask.redirect(flask.url_for('nerf-herder frontend.admin_poi'))
 
 
+@frontend.route('/org/poi/delete', methods = [ 'POST' ])
+@auth.login_required
+def admin_poi_delete():
+    try:
+        form = forms.POIUpdateForm()
+        db.POI.get(id = form.id.data).delete_instance()
+
+    except Exception, e:
+        flask.flash(str(e), 'error')
+
+    return flask.redirect(flask.url_for('nerf-herder frontend.admin_poi'))
+
+
 @frontend.route('/org/products/', methods = [ 'GET', 'POST' ])
 @auth.login_required
 def admin_products():
@@ -457,6 +484,19 @@ def admin_product_update():
                 flask.flash(u"Problem with '%s': %s" % (
                     getattr(form, field).label.text, error),
                     'error')
+
+    return flask.redirect(flask.url_for('nerf-herder frontend.admin_products'))
+
+
+@frontend.route('/org/products/delete', methods = [ 'POST' ])
+@auth.login_required
+def admin_product_delete():
+    try:
+        form = forms.ProductUpdateForm()
+        db.Product.get(id = form.id.data).delete_instance()
+
+    except Exception, e:
+        flask.flash(str(e), 'error')
 
     return flask.redirect(flask.url_for('nerf-herder frontend.admin_products'))
 
@@ -570,6 +610,20 @@ def update_purchase(people, products, form_data):
                 flask.flash(u"Problem with '%s': %s" % (
                     getattr(form, field).label.text, error),
                     'error')
+
+
+@frontend.route('/org/purchases/delete', methods = [ 'POST' ])
+@auth.login_required
+def admin_purchase_delete():
+    try:
+        form = forms.PurchaseUpdateForm()
+        db.Purchase.get(id = form.id.data).delete_instance()
+
+    except Exception, e:
+        flask.flash(str(e), 'error')
+
+    return flask.redirect(flask.url_for('nerf-herder frontend.admin_purchases',
+            **dict([tuple(form.redirect.data.split('='))])))
 
 
 @frontend.route('/org/payments/', methods = [ 'GET', 'POST' ])
@@ -688,6 +742,19 @@ def admin_todo_update():
                 flask.flash(u"Problem with '%s': %s" % (
                     getattr(form, field).label.text, error),
                     'error')
+
+    return flask.redirect(flask.url_for('nerf-herder frontend.admin_todo'))
+
+
+@frontend.route('/org/todo/delete', methods = [ 'POST' ])
+@auth.login_required
+def admin_todo_delete():
+    try:
+        form = forms.TodoUpdateForm()
+        db.Todo.get(id = form.id.data).delete_instance()
+
+    except Exception, e:
+        flask.flash(str(e), 'error')
 
     return flask.redirect(flask.url_for('nerf-herder frontend.admin_todo'))
 

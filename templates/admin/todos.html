@@ -24,6 +24,7 @@
               <td>{{ t.deadline(class_ = 'datepicker') }}</td>
               <td>{{ t.assignee }}</td>
               <td><input type="submit" value="Change"/></td>
+              <td><input type="submit" formaction="delete" value="Delete"/></td>
             </tr>
           </form>
         {% endfor %}
