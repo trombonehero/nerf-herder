@@ -123,6 +123,7 @@ class PurchaseForm(FlaskForm):
 
 class PurchaseUpdateForm(PurchaseForm):
     id = IntegerField(widget = HiddenInput(), validators = [ Required() ])
+    redirect = StringField(widget = HiddenInput())
 
     @classmethod
     def create(cls, people, products, data):

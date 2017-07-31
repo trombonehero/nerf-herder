@@ -484,9 +484,11 @@ def admin_purchases():
         args = flask.request.args
         if 'person' in args:
             person = db.Person.get(id = args['person'])
+            redirect = 'person=%d' % person.id
 
         elif 'product' in args:
             product = db.Product.get(id = args['product'])
+            redirect = 'product=%d' % product.id
 
         new = (
             forms.PurchaseForm(None, obj = None)
@@ -504,6 +506,11 @@ def admin_purchases():
         else:
             new = None
 
+        def update_form(p):
+            form = forms.PurchaseUpdateForm.create(people, products, p)
+            form.redirect.data = redirect
+            return (p, form)
+
     except Exception, e:
         flask.flash(str(e), 'error')
 
@@ -515,10 +522,7 @@ def admin_purchases():
         person = person,
         product = product,
         products = products,
-        purchases = [
-            (p, forms.PurchaseUpdateForm.create(people, products, p))
-            for p in purchases
-        ],
+        purchases = [ update_form(p) for p in purchases ],
         total = total,
     )
 
