@@ -697,7 +697,7 @@ def admin_todo():
         if new.validate_on_submit():
             t = db.Todo.create(description = new.description.data)
             if new.deadline: t.deadline = new.deadline.data
-            if new.assignee != -1: t.assignee = new.assignee.data
+            if new.assignee.data != -1: t.assignee = new.assignee.data
             if new.complete: t.complete = new.complete.data
             t.save()
 
