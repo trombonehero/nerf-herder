@@ -712,6 +712,7 @@ def admin_payments_update():
         p.date = form.date.data
         p.payer = form.payer.data
         p.value = form.value.data
+        p.note = form.note.data
         p.save()
 
     else:
