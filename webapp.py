@@ -432,7 +432,8 @@ def admin_products():
 
     return flask.render_template('admin/products.html',
         products = [
-            forms.ProductUpdateForm(None, obj = p) for p in db.Product.select()
+            (p, forms.ProductUpdateForm(None, obj = p))
+            for p in db.Product.select()
         ],
         new = new,
     )

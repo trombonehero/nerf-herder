@@ -11,19 +11,21 @@
           <tr>
             <th>Name</th>
             <th>Description</th>
+            <th>N</th>
             <th>Cost ({{ config.CURRENCY_SYMBOL | safe }} &div; 100)</th>
             <th>Special notes</th>
           </tr>
         </thead>
         <tbody>
-          {% for p in products %}
+          {% for (p, form) in products %}
             <form action="update" method="post">
               <tr>
-                {{ p.hidden_tag() }}
-                <td>{{ p.name }}</td>
-                <td>{{ p.description }}</td>
-                <td>{{ p.cost }}</td>
-                <td>{{ p.note }}</td>
+                {{ form.hidden_tag() }}
+                <td>{{ form.name }}</td>
+                <td>{{ form.description }}</td>
+                <td>{{ p.purchases.count() }}</td>
+                <td>{{ form.cost }}</td>
+                <td>{{ form.note }}</td>
                 <td><input type="submit" value="Modify"/></td>
               </tr>
             </form>
@@ -34,6 +36,7 @@
               {{ new.hidden_tag() }}
               <td>{{ new.name }}</td>
               <td>{{ new.description }}</td>
+              <td></td>
               <td>{{ new.cost }}</td>
               <td>{{ new.note }}</td>
               <td><input type="submit" value="Add"/></td>
