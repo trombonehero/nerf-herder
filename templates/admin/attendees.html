@@ -30,8 +30,30 @@
   <div class="container">
     <div class="panel">
       <div class="panel-heading">
-        This data is also available <a href="attendees.csv">in CSV format</a>
-        or <a href="email">plain text (contacts only)</a>.
+        <ul class="nav nav-pills">
+          <li><a href="mail-all">Mail all</a></li>
+          <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" data-target="#">
+              Export <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="attendees.csv">CSV</a></li>
+              <li class="divider"></li>
+              <li class="dropdown-header">Email addresses</li>
+              <li><a href="email">View as text</a></li>
+              <li>
+                <a id="copier" href="#"
+                   data-clipboard-text="{% for (p,f) in attendees %}{{ p.email }},{% endfor %}">
+                  Copy to clipboard
+                </a>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.12/clipboard.min.js"></script>
+                <script type="text/javascript">
+                  new Clipboard('#copier');
+                </script>
+              </li>
+            </ul>
+          </li>
+        </ul>
       </div>
       <div class="panel-body">
         <table class="table table-striped">
