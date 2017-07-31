@@ -674,7 +674,7 @@ def admin_payments():
             p = db.Payment.create(
                 payer = new.payer.data,
                 date = new.date.data,
-                value = 100 * new.value.data
+                value = new.value.data
             )
             if new.note:
                 p.note = new.note.data
