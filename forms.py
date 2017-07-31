@@ -152,7 +152,8 @@ class PurchaseUpdateForm(PurchaseForm):
 
 class PaymentForm(FlaskForm):
     payer = SelectField(coerce = int)
-    date = DateField(validators = [ Required() ])
+    date = DateField(validators = [ Required() ],
+        render_kw={"placeholder": "yyyy-mm-dd"})
     value = IntegerField(validators = [ Required() ])
     note = TextField()
 
