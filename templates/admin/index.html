@@ -51,7 +51,7 @@
               </li>
               <li>
                 <a href="payments">
-                  {{ total_payments }} paid in
+                  {{ total_payments | safe }} paid in
                   (out of {{ total_purchases | safe }})
                 </a>
               </li>
