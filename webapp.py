@@ -297,6 +297,43 @@ def admin_attendees_email():
             mimetype = 'text/plain',
     )
 
+@frontend.route('/org/attendees/mail-all', methods = [ 'GET', 'POST' ])
+@auth.login_required
+def admin_attendees_mail_all():
+    try:
+        attendees = db.Person.select()
+        form = forms.MailForm()
+
+        if flask.request.method == 'POST':
+            if form.validate_on_submit():
+                subject = '[%s] %s' % (config.SITE_TITLE, form.subject.data)
+                mail.send([ p.email for p in attendees ],
+                    subject = subject,
+                    body = form.body
+                )
+
+                flask.flash(u"Sent '%s' to %d attendees" % (
+                    subject, attendees.count()),
+                    'info')
+
+            for field, errors in form.errors.items():
+                for error in errors:
+                    flask.flash(u"Problem with '%s': %s" % (
+                        getattr(new_poi, field).label.text, error),
+                        'error')
+
+            return flask.redirect(
+                    flask.url_for('nerf-herder frontend.admin_attendees'))
+
+    except Exception, e:
+        flask.flash(str(e), 'error')
+
+    return flask.render_template('admin/mail-all.html',
+        attendees = db.Person.select(),
+        mail_form = form,
+        site_title = config.SITE_TITLE,
+    )
+
 @frontend.route('/org/attendees/update', methods = [ 'POST' ])
 @auth.login_required
 def admin_attendee_update():

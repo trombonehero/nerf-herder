@@ -83,6 +83,15 @@ class AttendeeUpdate(AttendeeForm):
         form.host.data = person.host_id if person.host_id else -1
         return form
 
+class MailForm(FlaskForm):
+    """
+    Form used to define (and validate) UI-entered emails for attendees
+    """
+    subject = TextField(validators = [ Required() ],
+        render_kw={"placeholder": "will be prefixed with [DevSummit Name]"})
+    body = TextField(widget = TextArea(), validators = [ Required() ],
+        render_kw={"placeholder": "plain text only", "rows": "10"})
+    send = SubmitField()
 
 class POIForm(FlaskForm):
     title = TextField()

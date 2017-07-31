@@ -1,0 +1,41 @@
+{% extends "admin/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import 'form.html' as form %}
+
+{% block content %}
+
+{{ super() }}
+
+<div class="container">
+  <div class="panel panel-primary">
+    <div class="panel-heading">Mail {{ attendees.count() }} attendees</div>
+    <div class="panel-body">
+      <form class="form form-horizontal">
+        <div class="form-group">
+          <label class="control-label col-md-2" for="addressees">To</label>
+          <div class="col-md-10">
+            <ul class="nav nav-pills">
+              {% for person in attendees %}
+                <li>
+                  <a href="/attendee/{{ person.id}}?auth={{ person.auth() }}">
+                    {{ person.name }}
+                  </a>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </form>
+
+      {{
+        wtf.quick_form(mail_form,
+          button_map={'send': 'primary'},
+          form_type='horizontal',
+          horizontal_columns=('md', 2, 10),
+        )
+      }}
+    </div>
+  </div>
+</div>
+
+{% endblock %}
