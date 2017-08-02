@@ -1,0 +1,15 @@
+{% macro panel(title, kind = 'default', footer = None, id = None, extra_classes = '') %}
+<div class="panel panel-{{ kind }} {{ extra_classes }}"
+     {% if id %} id="{{ id }}" {% endif %}
+    >
+  <div class="panel-heading">{{ title | safe }}</div>
+  <div class="panel-body">
+    {{ caller() }}
+  </div>
+  {% if footer %}
+  <div class="panel-footer">
+    {{ footer }}
+  </div>
+  {% endif %}
+</div>
+{% endmacro %}

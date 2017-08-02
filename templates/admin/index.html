@@ -7,9 +7,7 @@
 
 <div class="container">
   <div class="col-md-12">
-    <div class="panel">
-      <div class="panel-heading"><h4>Summary</h4></div>
-      <div class="panel-body">
+    {% call bs.panel('Summary') %}
         <div class="row">
           <div class="col-md-8">
             <div class="alert {%
@@ -72,13 +70,10 @@
           </tbody>
         </table>
       </div>
-    </div>
-  </div>
+    {% endcall %}
 
   <div class="col-md-12">
-    <div class="panel panel-primary">
-      <div class="panel-heading"><h4>Things to do</h4></div>
-      <div class="panel-body">
+    {% call bs.panel('<h4>Things to do</h4>', 'primary') %}
         <table class="table">
           <thead>
             <tr><th>Description</th><th>Deadline</th><th>Assigned to</th></tr>
@@ -95,13 +90,10 @@
           </tbody>
         </table>
       </div>
-    </div>
-  </div>
+  {% endcall %}
 
   <div class="col-md-6">
-    <div class="panel panel-info">
-      <div class="panel-heading"><h4>Bookings</h4></div>
-      <div class="panel-body">
+    {% call bs.panel('<h4>Bookings</h4>', 'info') %}
         <table class="table">
           <tbody>
             {% for b in bookings %}
@@ -115,13 +107,10 @@
           </tbody>
         </table>
       </div>
-    </div>
-  </div>
+  {% endcall %}
 
   <div class="col-md-6">
-    <div class="panel panel-info">
-      <div class="panel-heading"><h4>Orders</h4></div>
-      <div class="panel-body">
+    {% call bs.panel('<h4>Orders</h4>', 'info') %}
         <table class="table">
           <thead>
             <th>Description</th>
@@ -148,13 +137,10 @@
           </tbody>
         </table>
       </div>
-    </div>
-  </div>
+  {% endcall %}
 
   <div class="col-md-6">
-    <div class="panel panel-success">
-      <div class="panel-heading"><h4>Payments</h4></div>
-      <div class="panel-body">
+    {% call bs.panel('<h4>Payments</h4>', 'success') %}
         <table class="table">
           <thead>
             <th>Date</th>
@@ -180,13 +166,10 @@
           </tbody>
         </table>
       </div>
-    </div>
-  </div>
+  {% endcall %}
 
   <div class="col-md-6">
-    <div class="panel panel-danger">
-      <div class="panel-heading"><h4>Balances owing</h4></div>
-      <div class="panel-body">
+    {% call bs.panel('<h4>Balances owing</h4>', 'danger') %}
         <table class="table">
           <thead>
             <th>Attendee</th>
@@ -211,7 +194,6 @@
           </tbody>
         </table>
       </div>
-    </div>
-  </div>
+  {% endcall %}
 </div>
 {% endblock %}

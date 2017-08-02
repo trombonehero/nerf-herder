@@ -7,27 +7,21 @@
   <div class="container">
     <div class="row">
       <div class="col-md-6">
-        <div class="panel panel-info">
-          <div class="panel-heading">View by customer</div>
-          <div class="panel-body">
+        {% call bs.panel('View by customer', 'info') %}
             <form action=".">
               {{ form.chooser('person', people) }}
               <input class="btn" type="submit"/>
             </form>
-          </div>
-        </div>
+        {% endcall %}
       </div>
 
       <div class="col-md-6">
-        <div class="panel panel-success">
-          <div class="panel-heading">View by product</div>
-          <div class="panel-body">
+        {% call bs.panel('View by product', 'success') %}
             <form action=".">
               {{ form.chooser('product', products) }}
               <input class="btn" type="submit"/>
             </form>
-          </div>
-        </div>
+        {% endcall %}
       </div>
     </div>
 

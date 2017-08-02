@@ -7,9 +7,7 @@
 {{ super() }}
 
 <div class="container">
-  <div class="panel panel-primary">
-    <div class="panel-heading">Mail {{ attendees.count() }} attendees</div>
-    <div class="panel-body">
+  {% call bs.panel('Mail %d attendees' % attendees.count(), 'primary') %}
       <form class="form form-horizontal">
         <div class="form-group">
           <label class="control-label col-md-2" for="addressees">To</label>
@@ -34,8 +32,7 @@
           horizontal_columns=('md', 2, 10),
         )
       }}
-    </div>
-  </div>
+  {% endcall %}
 </div>
 
 {% endblock %}

@@ -42,21 +42,12 @@
 
       <div class="panel-body">
         {% if attendee.diet %}
-          <div class="panel panel-warning">
-            <div class="panel-heading">
-              Dietary needs
-            </div>
-            <div class="panel-body">
-              {{ attendee.diet }}
-            </div>
-          </div>
+          {% call bs.panel('Dietary needs', 'warning') %}
+            {{ attendee.diet }}
+          {% endcall %}
         {% endif %}
 
-        <div class="panel panel-info">
-          <div class="panel-heading">
-            Accommodation information
-          </div>
-          <div class="panel-body">
+        {% call bs.panel('Accommodation info', 'info') %}
             <a class="btn btn-default btn-raised pull-right"
              href="http://www.caths.cam.ac.uk/event/bsdcam-freebsd-developer-summit-accommodation">Book accommodation</a>
 
@@ -66,8 +57,7 @@
             for developers, but those accommodations must be booked separately
             through the College's website.
             Please use the button to the right to access the room block.
-          </div>
-        </div>
+        {% endcall %}
 
         <div class="col-md-6">
           <h2>Bookings</h2>
@@ -180,24 +170,17 @@
               Pay by bank transfer
             </button>
 
-            <div id="bank-details" class="collapse panel panel-info">
-              <div class="panel-heading">
-                Bank account details
-              </div>
-
-              <div class="address panel-body">Name: FreeBSD Developer Summit
+            {% call bs.panel('Bank account details', 'info',
+                             footer = 'Payments may not appear for several days; please do not pay twice!',
+                          extra_classes = "collapse", id="bank-details"
+                  ) %}
+              <div class="address">Name: FreeBSD Developer Summit
 Bank: HSBC Bank PLC
 Sort code: 40-16-08
 Account number: 92781026
 BIC / SWIFT code: MIDLGB22
 IBAN: GB36MIDL40160892781026</div>
-
-              <div class="panel-footer bg-info">
-                Payments may not appear for several days;
-                please do not pay twice!
-              </div>
-            </div>
-
+            {% endcall %}
           {% endif %}
         </div>
       </div>
