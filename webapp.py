@@ -29,6 +29,7 @@ import flask_bootstrap
 import flask_dotenv
 import flask_httpauth
 import forms
+import jinja2
 import mail
 import nav
 import sys
@@ -90,7 +91,24 @@ def render_error(code, message, *args):
 
 @frontend.route('/')
 def index():
-    return flask.render_template('index.html')
+    try: return flask.render_template('index.html')
+    except jinja2.exceptions.TemplateNotFound:
+        return flask.render_template_string('''
+{%- extends "base.html" -%}
+{% block content %}
+  {{ super() }}
+  <div class="container">
+    <div class="panel panel-danger">
+      <div class="panel-heading">No front page defined</div>
+      <div class="panel-body">
+        Copy <code>samples/index.html</code> to the
+        <code>templates</code> directory and apply local customizations.
+      </div>
+    </div>
+  </div>
+{% endblock %}
+        ''')
+
 
 
 @frontend.route('/attendee/<int:id>')
