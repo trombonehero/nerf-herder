@@ -98,13 +98,10 @@ def index():
 {% block content %}
   {{ super() }}
   <div class="container">
-    <div class="panel panel-danger">
-      <div class="panel-heading">No front page defined</div>
-      <div class="panel-body">
-        Copy <code>samples/index.html</code> to the
-        <code>templates</code> directory and apply local customizations.
-      </div>
-    </div>
+    {% call bs.panel('No front page defined', 'danger') %}
+      Copy <code>samples/index.html</code> to the
+      <code>templates</code> directory and apply local customizations.
+    {% endcall %}
   </div>
 {% endblock %}
         ''')
