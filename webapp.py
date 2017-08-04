@@ -591,7 +591,6 @@ def admin_purchases():
 
         if person:
             purchases = person.purchases
-            total = person.total_purchases()
 
         elif product:
             purchases = product.purchases
@@ -616,7 +615,7 @@ def admin_purchases():
         product = product,
         products = products,
         purchases = [ update_form(p) for p in purchases ],
-        total = total,
+        total = sum(p.total() for p in purchases),
     )
 
 
