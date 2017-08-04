@@ -324,7 +324,7 @@ def admin_attendees_mail_all():
                 subject = '[%s] %s' % (config.SITE_TITLE, form.subject.data)
                 mail.send([ p.email for p in attendees ],
                     subject = subject,
-                    body = form.body
+                    body = form.body.data,
                 )
 
                 flask.flash(u"Sent '%s' to %d attendees" % (
