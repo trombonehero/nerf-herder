@@ -223,7 +223,7 @@ class Product(BaseModel):
         return sum([ p.quantity for p in self.purchases ])
 
     def all_purchases(self):
-        return self.price() * self.quantity()
+        return sum(p.total() for p in self.purchases)
 
     def __str__(self):
         return '%s (%s)' % (self.description, self.price())
