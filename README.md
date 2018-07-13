@@ -140,6 +140,8 @@ You can see the preregistration code on console, then goto
 http://localhost:5000/register?preregistration=<code>
 ```
 
+The organiser's interfacfe is at `/org/`
+
 
 ## About the name
 
