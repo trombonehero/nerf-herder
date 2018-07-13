@@ -140,7 +140,7 @@ You can see the preregistration code on console, then goto
 http://localhost:5000/register?preregistration=<code>
 ```
 
-The organiser's interfacfe is at `/org/`
+The organiser's interface is at `/org/`
 
 
 ## About the name
