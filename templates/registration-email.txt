@@ -13,7 +13,7 @@ cl-bsdcam-organisers@lists.cam.ac.uk
 That's also the address to use if you have any questions about the DevSummit.
 
 If you haven't already done so, please sign yourself up on the Wiki page:
-https://wiki.freebsd.org/DevSummit/201708
+https://wiki.freebsd.org/DevSummit/201808
 
 We're looking forward to seeing you in Cambridge!
 

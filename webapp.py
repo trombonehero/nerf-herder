@@ -829,7 +829,7 @@ nav.nav.register_element('admin',
         nav.Subgroup(
             'External',
             nav.Link('Floor plans', 'https://www.cl.cam.ac.uk/maps'),
-            nav.Link('Wiki', 'https://wiki.freebsd.org/DevSummit/201708'),
+            nav.Link('Wiki', 'https://wiki.freebsd.org/DevSummit/201808'),
         ),
     )
 )
@@ -842,7 +842,7 @@ nav.nav.register_element('frontend_top',
         nav.Subgroup(
             'External',
             nav.Link('Floor plans', 'https://www.cl.cam.ac.uk/maps'),
-            nav.Link('Wiki', 'https://wiki.freebsd.org/DevSummit/201708'),
+            nav.Link('Wiki', 'https://wiki.freebsd.org/DevSummit/201808'),
         ),
     )
 )
