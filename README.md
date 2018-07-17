@@ -128,8 +128,19 @@ Then we start Nginx with `service nginx start`.
 
 The first user to register will be treated as an administrator.
 To make sure that first user is you, run the server without any
-`REGISTRATION_IS_OPEN` keys in your `.env` file.
+`REGISTRATION_IS_OPEN` keys in your `.env` file:
 
+```
+./nerfherd run --port=5000
+```
+
+You can see the preregistration code on console, then goto
+
+```
+http://localhost:5000/register?preregistration=<code>
+```
+
+The organiser's interface is at `/org/`
 
 
 ## About the name
