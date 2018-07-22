@@ -20,6 +20,7 @@ WTForms with CSRF protection... all the latest toys.
   * flask-nav
   * flask-wtf
   * flask-DotEnv
+  * Flask-HTTPAuth
   * peewee
   * psycopg2 (for use with Postgres)
   * python-dotenv
