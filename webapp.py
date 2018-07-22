@@ -185,9 +185,11 @@ def register():
             if host == -1:
                 host = None
 
-            try:
-                shirt = db.Product.get(id = form.shirt_style.data)
+            shirt_style = form.shirt_style.data
+            if shirt_style == -1:
+                shirt_style = None
 
+            try:
                 # Create the person in the database:
                 p = db.Person.create(
                     name = form.name.data,
@@ -215,10 +217,25 @@ def register():
                     date = datetime.datetime.now()
                 )
 
-                # Get them a shirt:
+                # Get them a shirt (if we have shirt for them):
+                if shirt_style is not None:
+                    shirt = db.Product.get(id = form.shirt_style.data)
+                    db.Purchase.create(
+                        buyer = p,
+                        item = shirt,
+                        quantity = 1,
+                        date = datetime.datetime.now(),
+                        complimentary = True
+                    )
+
+                # Get them a souvenir
+                souvenir = (
+                    db.Product.select().
+                        where(db.Product.name.startswith('Souvenir'))
+                )
                 db.Purchase.create(
                     buyer = p,
-                    item = shirt,
+                    item = souvenir,
                     quantity = 1,
                     date = datetime.datetime.now(),
                     complimentary = True
