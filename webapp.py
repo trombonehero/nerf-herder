@@ -114,7 +114,9 @@ def attendee(id):
         p = db.Person.get(id = id)
         if flask.request.args.get('auth') == p.auth():
             return flask.render_template('attendee.html',
-                attendee = p, products = db.Product.select())
+                attendee = p,
+                products = db.Product.select().where(db.Product.cost > 0)
+            )
 
     except db.Person.DoesNotExist:
         pass
