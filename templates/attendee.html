@@ -152,19 +152,6 @@
           </table>
 
           {% if attendee.paid() < attendee.total_purchases() %}
-            <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
-              <input type="hidden" name="cmd" value="_ext-enter" />
-              <input type="hidden" name="redirect_cmd" value="_xclick" />
-              <input type="hidden" name="item_name" value="Cambridge DevSummit" />
-              <input type="hidden" name="email" values="{{ attendee.email }}" />
-              <input type="hidden" name="custom" value="{{ attendee.email }}" />
-              <input type="hidden" name="amount" value="{{ (attendee.total_purchases() - attendee.paid()).value() }}" />
-              <input type="hidden" name="business" value="rwatson@FreeBSD.org" />
-              <input type="hidden" name="return" value="https://bsdcam.cl.cam.ac.uk/attendee/{{ attendee.id }}?auth={{ attendee.auth() }}"/>
-              <input type="hidden" name="currency_code" value="GBP" />
-              <input type="submit" class="btn btn-primary" value="Pay with PayPal" />
-            </form>
-
             <button class="btn btn-primary" data-toggle="collapse"
                 data-target="#bank-details">
               Pay by bank transfer
@@ -181,6 +168,19 @@ Account number: 92781026
 BIC / SWIFT code: MIDLGB22
 IBAN: GB36MIDL40160892781026</div>
             {% endcall %}
+
+            <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+              <input type="hidden" name="cmd" value="_ext-enter" />
+              <input type="hidden" name="redirect_cmd" value="_xclick" />
+              <input type="hidden" name="item_name" value="Cambridge DevSummit" />
+              <input type="hidden" name="email" values="{{ attendee.email }}" />
+              <input type="hidden" name="custom" value="{{ attendee.email }}" />
+              <input type="hidden" name="amount" value="{{ (attendee.total_purchases() - attendee.paid()).value() }}" />
+              <input type="hidden" name="business" value="rwatson@FreeBSD.org" />
+              <input type="hidden" name="return" value="https://bsdcam.cl.cam.ac.uk/attendee/{{ attendee.id }}?auth={{ attendee.auth() }}"/>
+              <input type="hidden" name="currency_code" value="GBP" />
+              <input type="submit" class="btn btn-primary" value="Pay with PayPal" />
+            </form>
           {% endif %}
         </div>
       </div>
