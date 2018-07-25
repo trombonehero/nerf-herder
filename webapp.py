@@ -114,7 +114,9 @@ def attendee(id):
         p = db.Person.get(id = id)
         if flask.request.args.get('auth') == p.auth():
             return flask.render_template('attendee.html',
-                attendee = p, products = db.Product.select())
+                attendee = p,
+                products = db.Product.select().where(db.Product.cost > 0)
+            )
 
     except db.Person.DoesNotExist:
         pass
@@ -172,7 +174,7 @@ def register():
     )
 
     form = forms.RegistrationForm().add_shirt_styles(shirt_styles)
-    form.add_hosts(db.Person.select())
+    form.add_hosts(db.Person.select().where(db.Person.host.is_null(True)))
 
     if flask.request.method == 'POST':
         if form.validate_on_submit():
@@ -185,9 +187,11 @@ def register():
             if host == -1:
                 host = None
 
-            try:
-                shirt = db.Product.get(id = form.shirt_style.data)
+            shirt_style = form.shirt_style.data
+            if shirt_style == -1:
+                shirt_style = None
 
+            try:
                 # Create the person in the database:
                 p = db.Person.create(
                     name = form.name.data,
@@ -215,10 +219,25 @@ def register():
                     date = datetime.datetime.now()
                 )
 
-                # Get them a shirt:
+                # Get them a shirt (if we have shirt for them):
+                if shirt_style is not None:
+                    shirt = db.Product.get(id = form.shirt_style.data)
+                    db.Purchase.create(
+                        buyer = p,
+                        item = shirt,
+                        quantity = 1,
+                        date = datetime.datetime.now(),
+                        complimentary = True
+                    )
+
+                # Get them a souvenir
+                souvenir = (
+                    db.Product.select().
+                        where(db.Product.name.startswith('Souvenir'))
+                )
                 db.Purchase.create(
                     buyer = p,
-                    item = shirt,
+                    item = souvenir,
                     quantity = 1,
                     date = datetime.datetime.now(),
                     complimentary = True

@@ -28,7 +28,7 @@ from wtforms.validators import Email, Optional, Required
 
 class AttendeeForm(FlaskForm):
     name = TextField(validators = [ Required() ])
-    username = TextField('FreeBSD username')
+    username = TextField('FreeBSD username (without @FreeBSD.org)')
     host = SelectField(coerce = int)
     email = TextField('Email address')
     administrator = BooleanField()
@@ -64,7 +64,10 @@ class RegistrationForm(AttendeeForm):
     shirt_style = SelectField(coerce = int, validators = [ Required() ])
 
     def add_shirt_styles(self, styles):
-        self.shirt_style.choices = [ (s.id, s.description) for s in styles ]
+        self.shirt_style.choices = (
+                [ (-1, 'No shirt but souvenir this year') ] +
+                [(s.id, s.description) for s in styles ]
+        )
         return self
 
 

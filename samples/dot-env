@@ -4,5 +4,6 @@ DATABASE_URL=sqlite://test.db
 MAIL_FROM="someone@example.com"
 MAIL_REPLYTO="Nice Name <devsummit-mailing-list@example.com>"
 MAIL_SMTP="localhost:25"
+MAPBOX_TOKEN="mapbox token"
 SECRET_KEY="something secret here... I use `apg -a 1` to generate secrets"
 SITE_TITLE="2017 Cambridge DevSummit"
