@@ -28,7 +28,7 @@ from wtforms.validators import Email, Optional, Required
 
 class AttendeeForm(FlaskForm):
     name = TextField(validators = [ Required() ])
-    username = TextField('FreeBSD username')
+    username = TextField('FreeBSD username (without @FreeBSD.org)')
     host = SelectField(coerce = int)
     email = TextField('Email address')
     administrator = BooleanField()
