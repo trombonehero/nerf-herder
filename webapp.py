@@ -174,7 +174,7 @@ def register():
     )
 
     form = forms.RegistrationForm().add_shirt_styles(shirt_styles)
-    form.add_hosts(db.Person.select())
+    form.add_hosts(db.Person.select().where(db.Person.host.is_null(True)))
 
     if flask.request.method == 'POST':
         if form.validate_on_submit():
